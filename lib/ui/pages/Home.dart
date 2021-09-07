@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
 class Home extends StatelessWidget {
@@ -7,7 +8,7 @@ class Home extends StatelessWidget {
       title: 'Home',
       home: Scaffold(
         appBar: AppBar(
-        title:Text('Home')
+        title:FaIcon(FontAwesomeIcons.twitter)
          ),
       body: Center(
         child: Column(

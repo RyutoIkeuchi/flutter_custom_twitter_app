@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+
 import '../../pages/Home.dart';
 import '../../pages/TimeLine.dart';
 import '../../pages/Attention.dart';
 import '../../pages/DirectMessage.dart';
+
 
 class BottomTabsNavigation extends StatefulWidget {
   @override
@@ -34,7 +36,7 @@ class _BottomTabsNavigationState extends State<BottomTabsNavigation> {
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
+            icon: Icon(Icons.notifications_none),
             label:'',
           ),
           BottomNavigationBarItem(
