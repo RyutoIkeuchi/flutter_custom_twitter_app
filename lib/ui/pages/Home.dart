@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../components/templates/DrawerView.dart';
 
 
 class Home extends StatelessWidget {
@@ -8,8 +9,9 @@ class Home extends StatelessWidget {
       title: 'Home',
       home: Scaffold(
         appBar: AppBar(
-        title:FaIcon(FontAwesomeIcons.twitter)
-         ),
+          title:FaIcon(FontAwesomeIcons.twitter )
+        ),
+        drawer:DrawerView(),
       body: Center(
         child: Column(
           children:<Widget> [
