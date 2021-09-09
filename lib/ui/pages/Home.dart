@@ -15,7 +15,10 @@ class Home extends StatelessWidget {
       body: Center(
         child: Column(
           children:<Widget> [
-            Text('Homeページです')
+            ElevatedButton(
+              onPressed:() {},
+              child: Text('API取得'),
+             ),
           ]
         ),
       ),

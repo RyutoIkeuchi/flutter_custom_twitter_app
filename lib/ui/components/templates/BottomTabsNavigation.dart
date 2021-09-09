@@ -4,6 +4,7 @@ import '../../pages/Home.dart';
 import '../../pages/TimeLine.dart';
 import '../../pages/Attention.dart';
 import '../../pages/DirectMessage.dart';
+import '../../../services/Api.dart';
 
 
 class BottomTabsNavigation extends StatefulWidget {
@@ -16,7 +17,8 @@ class _BottomTabsNavigationState extends State<BottomTabsNavigation> {
   int _currentIndex = 0;
   final _pageWidgets = [
     Home(),
-    TimeLine(),
+    // TimeLine(),
+    ApiToken(),
     Attention(),
     DirectMessage(),
   ];
