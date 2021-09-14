@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:oauth1/oauth1.dart' as oauth1;
 import 'package:url_launcher/url_launcher.dart';
 import '../../../services/OauthToken.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../config.dart';
 
@@ -52,7 +53,7 @@ class _Home extends State<Home> {
         {
           'q': 'flutter',
           'lang': 'ja',
-          'count': '3',
+          'count': '50',
         },
       ),
     );
@@ -67,14 +68,22 @@ class _Home extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children:[
-            Text(_data[0]['text'])
-          ],
-        )
+      appBar: AppBar(
+        title: FaIcon(FontAwesomeIcons.twitter)
       ),
+      body: ListView.builder(
+          itemCount: _data.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                border: Border.all(color:Colors.black26)
+              ),
+              child:ListTile(
+                title:Text(_data[index]['text'])
+              )
+            );
+          }),
     );
   }
 }

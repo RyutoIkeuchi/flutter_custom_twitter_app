@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:oauth1/oauth1.dart' as oauth1;
 import 'package:url_launcher/url_launcher.dart';
+import '../services/OauthToken.dart';
 
 import '../config.dart';
 
@@ -22,7 +23,7 @@ class _ApiTokenState extends State<ApiToken> {
     TWITTER_API_KEY,
     TWITTER_API_KEY_SECRET,
   );
-  late final auth = oauth1.Authorization(clientCredentials,platform);
+  late final auth = oauth1.Authorization(clientCredentials, platform);
   oauth1.Credentials? tokenCredentials;
 
   @override
@@ -39,55 +40,34 @@ class _ApiTokenState extends State<ApiToken> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:Center(
-        child: Column(
-          mainAxisAlignment:MainAxisAlignment.center,
-          children: [
-            // TextFormField(
-            //   controller:controller
-            // ),
-            ElevatedButton(
-              onPressed:() async {
-                // final pin = controller.text;
-                // final verifier = pin;
-                // final res = await auth.requestTokenCredentials(
-                //   tokenCredentials!,
-                //   verifier,
-                // );
-                print('Access Token!');
-                print('Access Token Secret!');
+        body: Center(
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      TextFormField(
+        controller: controller,
+      ),
+      ElevatedButton(
+        onPressed: () async {
+          final pin = controller.text;
+          final verifier = pin;
+          final res =
+              await auth.requestTokenCredentials(tokenCredentials!, verifier);
+          print('Access Token: ${res.credentials.token}');
+          print('Access Token Secret: ${res.credentials.tokenSecret}');
 
-                final client = oauth1.Client(
-                  platform.signatureMethod,
-                  clientCredentials,
-                   oauth1.Credentials(
-                     ACCESS_TOKEN,
-                     ACCESS_TOKEN_SECRET,
-                   ),
-                );
-                final res = await client.get(
-                  Uri.https(
-                      'api.twitter.com',
-                      '/1.1/search/tweets.json',
-                      {
-                        'q': 'flutter',
-                        'lang': 'ja',
-                        'count': '1',
-                      },
-                  ),
-                );
-                final body = jsonDecode(res.body);
-                print(body);
-                // final apiResponse = await client.get(
-                //   Uri.parse('https://api.twitter.com/1.1/statuses/home_timeline.json?count=1')
-                // );
-                // print(apiResponse.body);
-              },
-              child:Text('OK'),
-            )
-          ]
-        )
+          final client = oauth1.Client(
+            platform.signatureMethod,
+            clientCredentials,
+            res.credentials,
+          );
+
+          final apiResponse = await client.get(
+            Uri.parse('https://api.twitter.com/1.1/statuses/home_timeline.json?count=1')
+          );
+          print(apiResponse.body);
+        },
+        child: Text('タップ'),
       )
-    );
+    ])));
   }
 }
