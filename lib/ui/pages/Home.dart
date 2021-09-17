@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:oauth1/oauth1.dart' as oauth1;
 import 'package:url_launcher/url_launcher.dart';
-import '../../../services/OauthToken.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../config.dart';
@@ -13,7 +12,7 @@ class Home extends StatefulWidget {
 }
 
 class _Home extends State<Home> {
-  List<dynamic> _data = [];
+  dynamic _data = [];
   final controller = TextEditingController();
   final platform = oauth1.Platform(
     'https://api.twitter.com/oauth/request_token',
@@ -49,17 +48,15 @@ class _Home extends State<Home> {
     final res = await client.get(
       Uri.https(
         'api.twitter.com',
-        '/1.1/search/tweets.json',
-        {
-          'q': 'flutter',
-          'lang': 'ja',
-          'count': '50',
-        },
+        '/1.1/statuses/home_timeline.json',
+        {'count': '100'},
       ),
     );
-    Map<String, dynamic> body = jsonDecode(res.body);
+    dynamic body = jsonDecode(res.body);
+    print('タイムライン');
     print(body);
-    List<dynamic> data = body['statuses'];
+    print(body[1]['text']);
+    dynamic data = body;
     setState(() {
       _data = data;
     });
@@ -68,22 +65,18 @@ class _Home extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: FaIcon(FontAwesomeIcons.twitter)
-      ),
+      appBar: AppBar(title: FaIcon(FontAwesomeIcons.twitter)),
       body: ListView.builder(
           itemCount: _data.length,
           itemBuilder: (BuildContext context, int index) {
             return Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                border: Border.all(color:Colors.black26)
-              ),
-              child:ListTile(
-                title:Text(_data[index]['text'])
-              )
-            );
+                padding: EdgeInsets.all(10),
+                decoration:
+                    BoxDecoration(border: Border.all(color: Colors.black26)),
+                child: ListTile(title: Text(_data[index]['text'])));
+                // child: ListTile(title:Text('ああああ')));
           }),
     );
   }
 }
+

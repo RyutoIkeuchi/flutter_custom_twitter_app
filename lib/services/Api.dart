@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:oauth1/oauth1.dart' as oauth1;
 import 'package:url_launcher/url_launcher.dart';
-import '../services/OauthToken.dart';
 
 import '../config.dart';
 

@@ -17,8 +17,7 @@ class _BottomTabsNavigationState extends State<BottomTabsNavigation> {
   int _currentIndex = 0;
   final _pageWidgets = [
     Home(),
-    // TimeLine(),
-    ApiToken(),
+    Timeline(),
     Attention(),
     DirectMessage(),
   ];
