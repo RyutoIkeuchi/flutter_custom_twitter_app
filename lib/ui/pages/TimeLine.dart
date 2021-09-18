@@ -57,7 +57,6 @@ class _Timeline extends State<Timeline> {
       ),
     );
     Map<String, dynamic> body = jsonDecode(res.body);
-    print(body);
     List<dynamic> data = body['statuses'];
     setState(() {
       _data = data;

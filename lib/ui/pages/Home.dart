@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_twitter_app/ui/components/templates/DrawerView.dart';
 import 'package:oauth1/oauth1.dart' as oauth1;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../components/templates/DrawerView.dart';
 
 import '../../../config.dart';
 
@@ -53,9 +55,9 @@ class _Home extends State<Home> {
       ),
     );
     dynamic body = jsonDecode(res.body);
-    print('タイムライン');
-    print(body);
-    print(body[1]['text']);
+    print(body[3]);
+    print(body[5]);
+
     dynamic data = body;
     setState(() {
       _data = data;
@@ -65,7 +67,10 @@ class _Home extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: FaIcon(FontAwesomeIcons.twitter)),
+      appBar: AppBar(
+        title: FaIcon(FontAwesomeIcons.twitter),
+      ),
+      drawer: DrawerView(),
       body: ListView.builder(
           itemCount: _data.length,
           itemBuilder: (BuildContext context, int index) {
@@ -73,10 +78,52 @@ class _Home extends State<Home> {
                 padding: EdgeInsets.all(10),
                 decoration:
                     BoxDecoration(border: Border.all(color: Colors.black26)),
-                child: ListTile(title: Text(_data[index]['text'])));
-                // child: ListTile(title:Text('ああああ')));
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image.network(
+                            _data[index]['user']['profile_image_url_https'],
+                            width: 40,
+                            height: 40,
+                            fit: BoxFit.fill),
+                      ),
+                    ),
+                    Expanded(
+                        flex: 4,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      _data[index]['user']['name'],
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  Flexible(
+                                      child: Text(
+                                    _data[index]['user']['screen_name'],
+                                    style: TextStyle(
+                                        fontSize: 11, color: Colors.grey),
+                                  )),
+                                ],
+                              ),
+                              Container(child: Text(_data[index]['text'])),
+                              Image.network('http://pbs.twimg.com/media/E_jY9frVUAMAFVv.jpg')
+                            ]))
+                  ],
+                )); // child: ListTile(title:Text('ああああ')));
           }),
     );
   }
 }
-
