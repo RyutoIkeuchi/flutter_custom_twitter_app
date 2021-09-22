@@ -5,6 +5,7 @@ import 'package:oauth1/oauth1.dart' as oauth1;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../components/templates/DrawerView.dart';
+import "package:intl/intl.dart";
 
 import '../../../config.dart';
 
@@ -15,6 +16,25 @@ class Home extends StatefulWidget {
 
 class _Home extends State<Home> {
   dynamic _data = [];
+  var dateNow = DateTime.now();
+
+  String tweetTimeDate(date) {
+    final formatTime = new DateFormat('EEE MMM d HH:mm:ss +0000 yyyy').parse(date);
+    final japanTime = formatTime.add(Duration(hours: 9));
+    final Duration difference = DateTime.now().difference(japanTime);
+    final int sec = difference.inSeconds;
+
+    if (sec >= 60 * 60 * 24) {
+      return '・${difference.inDays.toString()}日前';
+    } else if (sec >= 60 * 60) {
+      return '・${difference.inHours.toString()}時間前';
+    } else if (sec >= 60) {
+      return '・${difference.inMinutes.toString()}分前';
+    } else {
+      return '・$sec秒前';
+    }
+  }
+
   final controller = TextEditingController();
   final platform = oauth1.Platform(
     'https://api.twitter.com/oauth/request_token',
@@ -55,8 +75,6 @@ class _Home extends State<Home> {
       ),
     );
     dynamic body = jsonDecode(res.body);
-    print(body[3]);
-    print(body[5]);
 
     dynamic data = body;
     setState(() {
@@ -106,6 +124,7 @@ class _Home extends State<Home> {
                                     child:Container(
                                       child: Row(
                                         crossAxisAlignment: CrossAxisAlignment.end,
+
                                         children: [
                                           Flexible(
                                             flex: 5,
@@ -126,11 +145,11 @@ class _Home extends State<Home> {
                                             overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
-                                          Flexible(
-                                            child: Text(
-                                              '1時間',
+                                          Expanded(
+                                            flex: 2,
+                                            child: Text(tweetTimeDate(_data[index]['created_at']),
                                               style: TextStyle(
-                                                  fontSize: 13,
+                                                  fontSize: 12,
                                                   color: Colors.black54,
                                               ),
                                             ),
