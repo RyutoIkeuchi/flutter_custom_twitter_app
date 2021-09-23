@@ -35,6 +35,28 @@ class _Home extends State<Home> {
     }
   }
 
+  String replaceText(text) {
+    var match = RegExp(r'https?://[a-zA-Z0-9\-%_/=&?.]+')
+        .hasMatch(text);
+    if(match) {
+      return text.replaceFirst(RegExp(r'https?://[a-zA-Z0-9\-%_/=&?.]+'),'');
+    } else {
+      return text;
+    }
+  }
+
+  dynamic viewImage(data) {
+    if(RegExp(r'https?://[a-zA-Z0-9\-%_/=&?.]+').hasMatch(data['text'])) {
+      if(data['entities']['media'] != null) {
+        return Image.network(data['entities']['media'][0]['media_url']);
+      } else {
+        return Text(data['entities']['urls'][0]['display_url']);
+      }
+    } else {
+      return Text('画像なし');
+    }
+  }
+
   final controller = TextEditingController();
   final platform = oauth1.Platform(
     'https://api.twitter.com/oauth/request_token',
@@ -166,7 +188,8 @@ class _Home extends State<Home> {
                                   
                                 ],
                               ),
-                              Container(child: Text(_data[index]['text'])),
+                              Container(child: Text(replaceText(_data[index]['text']))),
+                              Container(child:viewImage(_data[index])),
                               Container(
                                 margin: EdgeInsets.only(top:10),
                                 child: Row(
