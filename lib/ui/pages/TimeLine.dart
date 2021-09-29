@@ -50,7 +50,7 @@ class _Timeline extends State<Timeline> {
         'api.twitter.com',
         '/1.1/search/tweets.json',
         {
-          'q': '阪神',
+          'q': '福留孝介さんがスアレスから',
           'lang': 'ja',
           'count': '50',
         },
