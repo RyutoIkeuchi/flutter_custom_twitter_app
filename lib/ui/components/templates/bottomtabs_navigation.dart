@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_twitter_app/ui/components/templates/DrawerView.dart';
 
-import '../../pages/TimelinePage.dart';
-import '../../pages/SearchPage.dart';
-import '../../pages/AttentionPage.dart';
-import '../../pages/DirectMessagePage.dart';
-import '../../../services/Api.dart';
+import '../../pages/timeline_page.dart';
+import '../../pages/search_page.dart';
+import '../../pages/attention_page.dart';
+import '../../pages/direct_message_page.dart';
 
 
 class BottomTabsNavigation extends StatefulWidget {

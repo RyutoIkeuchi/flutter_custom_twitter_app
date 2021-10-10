@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ui/components/templates/BottomTabsNavigation.dart';
+import 'ui/components/templates/bottomtabs_navigation.dart';
 
 void main() {
   runApp(MyApp());
