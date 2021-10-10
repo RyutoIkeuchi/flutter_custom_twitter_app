@@ -9,12 +9,12 @@ import 'package:oauth1/oauth1.dart' as oauth1;
 import '../../../config.dart';
 import '../components/templates/DrawerView.dart';
 
-class Home extends StatefulWidget {
+class Timeline extends StatefulWidget {
   @override
-  _Home createState() => _Home();
+  _Timeline createState() => _Timeline();
 }
 
-class _Home extends State<Home> {
+class _Timeline extends State<Timeline> {
   dynamic _data = [];
   var dateNow = DateTime.now();
 

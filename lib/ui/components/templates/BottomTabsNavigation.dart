@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_twitter_app/ui/components/templates/DrawerView.dart';
 
-import '../../pages/Home.dart';
-import '../../pages/TimeLine.dart';
-import '../../pages/Attention.dart';
-import '../../pages/DirectMessage.dart';
+import '../../pages/TimelinePage.dart';
+import '../../pages/SearchPage.dart';
+import '../../pages/AttentionPage.dart';
+import '../../pages/DirectMessagePage.dart';
 import '../../../services/Api.dart';
 
 
@@ -17,8 +17,8 @@ class _BottomTabsNavigationState extends State<BottomTabsNavigation> {
 
   int _currentIndex = 0;
   final _pageWidgets = [
-    Home(),
     Timeline(),
+    Search(),
     Attention(),
     DirectMessage(),
   ];

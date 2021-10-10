@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:oauth1/oauth1.dart' as oauth1;
 import 'package:url_launcher/url_launcher.dart';
@@ -6,12 +7,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../config.dart';
 
-class Timeline extends StatefulWidget {
+class Search extends StatefulWidget {
   @override
-  _Timeline createState() => _Timeline();
+  _Search createState() => _Search();
 }
 
-class _Timeline extends State<Timeline> {
+class _Search extends State<Search> {
   List<dynamic> _data = [];
   final controller = TextEditingController();
   final platform = oauth1.Platform(
@@ -50,7 +51,7 @@ class _Timeline extends State<Timeline> {
         'api.twitter.com',
         '/1.1/search/tweets.json',
         {
-          'q': '福留孝介さんがスアレスから',
+          'q': 'flutter',
           'lang': 'ja',
           'count': '50',
         },
@@ -58,6 +59,7 @@ class _Timeline extends State<Timeline> {
     );
     Map<String, dynamic> body = jsonDecode(res.body);
     List<dynamic> data = body['statuses'];
+    print(data);
     setState(() {
       _data = data;
     });
@@ -66,21 +68,15 @@ class _Timeline extends State<Timeline> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: FaIcon(FontAwesomeIcons.twitter)
-      ),
+      appBar: AppBar(title: FaIcon(FontAwesomeIcons.twitter)),
       body: ListView.builder(
           itemCount: _data.length,
           itemBuilder: (BuildContext context, int index) {
             return Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                border: Border.all(color:Colors.black26)
-              ),
-              child:ListTile(
-                title:Text(_data[index]['text'])
-              )
-            );
+                padding: EdgeInsets.all(10),
+                decoration:
+                    BoxDecoration(border: Border.all(color: Colors.black26)),
+                child: ListTile(title: Text(_data[index]['text'])));
           }),
     );
   }
