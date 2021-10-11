@@ -9,13 +9,13 @@ import '../../services/api.dart';
 import '../components/templates/drawer_view.dart';
 
 class TweetTimelineData extends ChangeNotifier {
-  dynamic data;
-  void getTweetTimelineData() async {
+  List<dynamic> data = [];
+  Future<dynamic> getTweetTimelineData() async {
     this.data = await getApi();
     notifyListeners();
   }
 
-  dynamic refresh() async {
+  Future<dynamic> refresh() async {
     this.data = await getApi();
     notifyListeners();
   }
@@ -44,6 +44,9 @@ class Timeline extends StatelessWidget {
             drawer: DrawerView(),
             body: Consumer<TweetTimelineData>(builder: (context, model, child) {
               final dynamic data = model.data;
+              if (data == []) {
+                return CircularProgressIndicator();
+              }
               return RefreshIndicator(
                 onRefresh: () async {
                   print('リフレッシュします');
@@ -60,8 +63,9 @@ class Timeline extends StatelessWidget {
                                   bottom: BorderSide(
                                       color: Colors.black12, width: 1.0))),
                           child: !checkTextData(data[index]['text'])
-                              ? TweetCard(data[index])
-                              : ReTweetCard(data[index])); // child: ListTile(title:Text('ああああ')));
+                              ? tweetCard(data[index])
+                              : reTweetCard(data[
+                                  index])); // child: ListTile(title:Text('ああああ')));
                     }),
               );
             })));

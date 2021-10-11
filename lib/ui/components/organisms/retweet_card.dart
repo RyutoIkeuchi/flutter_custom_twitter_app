@@ -71,7 +71,7 @@ dynamic viewImage(data) {
   }
 }
 
-Widget ReTweetCard(dynamic data) {
+Widget reTweetCard(dynamic data) {
     return Column(
       children: [
         Row(

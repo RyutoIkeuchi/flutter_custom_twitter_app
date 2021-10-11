@@ -71,7 +71,7 @@ dynamic viewImage(data) {
   }
 }
 
-Widget TweetCard(dynamic data) {
+Widget tweetCard(dynamic data) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
