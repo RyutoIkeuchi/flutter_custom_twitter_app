@@ -9,19 +9,19 @@ import '../../services/api.dart';
 import '../components/templates/drawer_view.dart';
 
 class TweetTimelineData extends ChangeNotifier {
-  dynamic data = [];
-  dynamic getTweetTimelineData() async {
-    data = await getApi();
+  dynamic data;
+  void getTweetTimelineData() async {
+    this.data = await getApi();
+    notifyListeners();
   }
 
   dynamic refresh() async {
-    data = await getApi();
+    this.data = await getApi();
     notifyListeners();
   }
 }
 
 class Timeline extends StatelessWidget {
-  final dynamic data = TweetTimelineData().getTweetTimelineData();
   final dateNow = DateTime.now();
 
   bool checkTextData(text) {
@@ -36,31 +36,34 @@ class Timeline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<TweetTimelineData>(
-        create: (context) => TweetTimelineData(),
+        create: (_) => TweetTimelineData()..getTweetTimelineData(),
         child: Scaffold(
             appBar: AppBar(
               title: FaIcon(FontAwesomeIcons.twitter),
             ),
             drawer: DrawerView(),
-            body: RefreshIndicator(
-              onRefresh: () async {
-                print('リフレッシュします');
-                await TweetTimelineData().refresh();
-              },
-              child: ListView.builder(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  itemCount: data.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(
-                                    color: Colors.black12, width: 1.0))),
-                        child: !checkTextData(data[index]['text'])
-                            ? TweetCard(index)
-                            : ReTweetCard(index)); // child: ListTile(title:Text('ああああ')));
-                  }),
-            )));
+            body: Consumer<TweetTimelineData>(builder: (context, model, child) {
+              final dynamic data = model.data;
+              return RefreshIndicator(
+                onRefresh: () async {
+                  print('リフレッシュします');
+                  await TweetTimelineData().refresh();
+                },
+                child: ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemCount: data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      color: Colors.black12, width: 1.0))),
+                          child: !checkTextData(data[index]['text'])
+                              ? TweetCard(data[index])
+                              : ReTweetCard(data[index])); // child: ListTile(title:Text('ああああ')));
+                    }),
+              );
+            })));
   }
 }

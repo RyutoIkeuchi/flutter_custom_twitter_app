@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import "package:intl/intl.dart";
 
-import 'package:flutter_custom_twitter_app/ui/pages/timeline_page.dart';
-import 'package:provider/provider.dart';
-
-
 String tweetTimeDate(date) {
   final formatTime =
       new DateFormat('EEE MMM d HH:mm:ss +0000 yyyy').parse(date);
@@ -75,12 +71,7 @@ dynamic viewImage(data) {
   }
 }
 
-class ReTweetCard extends StatelessWidget {
-  ReTweetCard(int index);
-  @override
-  Widget build(BuildContext context) {
-    dynamic _data = Provider.of<TweetTimelineData>(context);
-    dynamic index;
+Widget ReTweetCard(dynamic data) {
     return Column(
       children: [
         Row(
@@ -98,7 +89,7 @@ class ReTweetCard extends StatelessWidget {
             Expanded(
               flex: 7,
               child: Text(
-                '${_data[index]['user']['name']}さんがリツイート',
+                '${data['user']['name']}さんがリツイート',
                 style: TextStyle(
                     fontSize: 10,
                     color: Colors.black54,
@@ -116,7 +107,7 @@ class ReTweetCard extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image.network(
-                    _data[index]['retweeted_status']['user']
+                    data['retweeted_status']['user']
                         ['profile_image_url_https'],
                     width: 40,
                     height: 40,
@@ -139,7 +130,7 @@ class ReTweetCard extends StatelessWidget {
                                     Flexible(
                                       flex: 5,
                                       child: Text(
-                                        _data[index]['entities']
+                                        data['entities']
                                             ['user_mentions'][0]['name'],
                                         style: TextStyle(
                                             fontSize: 13,
@@ -151,7 +142,7 @@ class ReTweetCard extends StatelessWidget {
                                     Flexible(
                                       child: Text(
                                         '@' +
-                                            _data[index]['entities']
+                                            data['entities']
                                                     ['user_mentions'][0]
                                                 ['screen_name'],
                                         style: TextStyle(
@@ -164,7 +155,7 @@ class ReTweetCard extends StatelessWidget {
                                       flex: 2,
                                       child: Text(
                                         tweetTimeDate(
-                                            _data[index]['created_at']),
+                                            data['created_at']),
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: Colors.black54,
@@ -184,8 +175,8 @@ class ReTweetCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Container(child: Text(replaceText(_data[index]['text']))),
-                      Container(child: viewImage(_data[index])),
+                      Container(child: Text(replaceText(data['text']))),
+                      Container(child: viewImage(data)),
                       Container(
                         margin: EdgeInsets.only(top: 10),
                         child: Row(
@@ -205,7 +196,7 @@ class ReTweetCard extends StatelessWidget {
                                     ),
                                     Container(
                                       margin: EdgeInsets.only(left: 5),
-                                      child: Text(_data[index]['retweet_count']
+                                      child: Text(data['retweet_count']
                                           .toString()),
                                     ),
                                   ],
@@ -223,7 +214,7 @@ class ReTweetCard extends StatelessWidget {
                                     ),
                                     Container(
                                       margin: EdgeInsets.only(left: 5),
-                                      child: Text(_data[index]['favorite_count']
+                                      child: Text(data['favorite_count']
                                           .toString()),
                                     ),
                                   ],
@@ -245,5 +236,4 @@ class ReTweetCard extends StatelessWidget {
         )
       ],
     );
-  }
 }

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_twitter_app/ui/pages/timeline_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import "package:intl/intl.dart";
-import 'package:provider/provider.dart';
 
 String tweetTimeDate(date) {
   final formatTime =
@@ -73,13 +71,7 @@ dynamic viewImage(data) {
   }
 }
 
-class TweetCard extends StatelessWidget {
-  TweetCard(int index);
-
-  @override
-  Widget build(BuildContext context) {
-    dynamic _data = Provider.of<TweetTimelineData>(context);
-    dynamic index;
+Widget TweetCard(dynamic data) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -89,7 +81,7 @@ class TweetCard extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: Image.network(
-                _data[index]['user']['profile_image_url_https'],
+                data['user']['profile_image_url_https'],
                 width: 40,
                 height: 40,
                 fit: BoxFit.fill),
@@ -111,7 +103,7 @@ class TweetCard extends StatelessWidget {
                             Flexible(
                               flex: 5,
                               child: Text(
-                                _data[index]['user']['name'],
+                                data['user']['name'],
                                 style: TextStyle(
                                     fontSize: 13,
                                     color: Colors.black,
@@ -121,7 +113,7 @@ class TweetCard extends StatelessWidget {
                             ),
                             Flexible(
                               child: Text(
-                                '@' + _data[index]['user']['screen_name'],
+                                '@' + data['user']['screen_name'],
                                 style: TextStyle(
                                     fontSize: 11, color: Colors.black54),
                                 overflow: TextOverflow.ellipsis,
@@ -130,7 +122,7 @@ class TweetCard extends StatelessWidget {
                             Expanded(
                               flex: 2,
                               child: Text(
-                                tweetTimeDate(_data[index]['created_at']),
+                                tweetTimeDate(data['created_at']),
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.black54,
@@ -150,8 +142,8 @@ class TweetCard extends StatelessWidget {
                   ),
                 ],
               ),
-              Container(child: Text(replaceText(_data[index]['text']))),
-              Container(child: viewImage(_data[index])),
+              Container(child: Text(replaceText(data['text']))),
+              Container(child: viewImage(data)),
               Container(
                 margin: EdgeInsets.only(top: 10),
                 child: Row(
@@ -172,7 +164,7 @@ class TweetCard extends StatelessWidget {
                             Container(
                               margin: EdgeInsets.only(left: 5),
                               child: Text(
-                                  _data[index]['retweet_count'].toString()),
+                                  data['retweet_count'].toString()),
                             ),
                           ],
                         ),
@@ -190,7 +182,7 @@ class TweetCard extends StatelessWidget {
                             Container(
                               margin: EdgeInsets.only(left: 5),
                               child: Text(
-                                  _data[index]['favorite_count'].toString()),
+                                  data['favorite_count'].toString()),
                             ),
                           ],
                         ),
@@ -209,7 +201,6 @@ class TweetCard extends StatelessWidget {
             ]))
       ],
     );
-  }
 }
 
 // dynamic TweetCard(_data, index) {
@@ -222,7 +213,7 @@ class TweetCard extends StatelessWidget {
 //         flex: 1,
 //         child: ClipRRect(
 //           borderRadius: BorderRadius.circular(20),
-//           child: Image.network(_data[index]['user']['profile_image_url_https'],
+//           child: Image.network(_data['user']['profile_image_url_https'],
 //               width: 40, height: 40, fit: BoxFit.fill),
 //         ),
 //       ),

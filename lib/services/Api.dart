@@ -35,5 +35,6 @@ Future<dynamic> getApi() async {
     ),
   );
 
-  return jsonDecode(res.body);
+  final dynamic data = jsonDecode(res.body);
+  return data;
 }
