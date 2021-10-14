@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_twitter_app/ui/components/organisms/retweet_card.dart';
+import 'package:flutter_custom_twitter_app/ui/components/templates/retweet_card.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-import 'package:flutter_custom_twitter_app/ui/components/organisms/tweet_card.dart';
+import 'package:flutter_custom_twitter_app/ui/components/templates/tweet_card.dart';
 import 'package:flutter_custom_twitter_app/ui/components/templates/drawer_view.dart';
 import '../../services/api.dart';
 import '../components/templates/drawer_view.dart';
@@ -61,13 +61,19 @@ class Timeline extends StatelessWidget {
                           decoration: BoxDecoration(
                               border: Border(
                                   bottom: BorderSide(
-                                      color: Colors.black12, width: 1.0))),
+                                      color: Colors.black12, width: 1.0
+                                  )
+                              )
+                          ),
                           child: !checkTextData(data[index]['text'])
                               ? tweetCard(data[index])
-                              : reTweetCard(data[
-                                  index])); // child: ListTile(title:Text('ああああ')));
-                    }),
+                              : reTweetCard(data[index])
+                      ); 
+                    }
+                ),
               );
-            })));
+            })
+        )
+    );
   }
 }
