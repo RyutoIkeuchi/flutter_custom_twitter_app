@@ -2,7 +2,7 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_twitter_app/models/home_timeline_model.dart';
-import 'package:flutter_custom_twitter_app/services/homt_time_line.dart';
+import 'package:flutter_custom_twitter_app/services/home_time_line.dart';
 import 'package:flutter_custom_twitter_app/ui/components/templates/retweet_card.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
