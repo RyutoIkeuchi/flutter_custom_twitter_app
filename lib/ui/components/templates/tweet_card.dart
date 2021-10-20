@@ -11,7 +11,7 @@ Widget tweetCard(dynamic data) {
       children: [
         Flexible(
           flex: 1,
-          child: userIcon(data['user']['profile_image_url_https'])
+          child: userIcon(data['profileImageUrl'])
         ),
         Expanded(
             flex: 4,

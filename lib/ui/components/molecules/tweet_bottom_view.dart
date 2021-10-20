@@ -21,7 +21,7 @@ Widget tweetBottomView(dynamic data) {
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 5),
-                  child: Text(data['retweet_count'].toString()),
+                  child: Text(data['retweetCount'].toString()),
                 ),
               ],
             ),
@@ -38,7 +38,7 @@ Widget tweetBottomView(dynamic data) {
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 5),
-                  child: Text(data['favorite_count'].toString()),
+                  child: Text(data['favoriteCount'].toString()),
                 ),
               ],
             ),

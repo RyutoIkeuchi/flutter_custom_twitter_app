@@ -33,15 +33,15 @@ Widget tweetUserInfo(dynamic data) {
               children: [
                 Flexible(
                   flex: 5,
-                  child: tweetUserName(data['user']['name'])
+                  child: tweetUserName(data['userName'])
                 ),
                 Flexible(
-                  child: tweetUserId(data['user']['screen_name'])
+                  child: tweetUserId(data['userId'])
                 ),
                 Expanded(
                   flex: 2,
                   child: Text(
-                    tweetTimeDate(data['created_at']),
+                    tweetTimeDate(data['createdAt']),
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.black54,

@@ -18,13 +18,13 @@ String replaceText(text) {
 
 dynamic viewImage(data) {
   if (RegExp(r'https?://[a-zA-Z0-9\-%_/=&?.]+').hasMatch(data['text'])) {
-    if (data['entities']['media'] != null) {
+    if (data['entitiesMedia'] != null) {
       // print(data['entities']);
-      if (data['entities']['media'].length >= 2) {
+      if (data['entitiesMedia'].length >= 2) {
         return GridView.count(
           crossAxisCount: 2,
           children: <Widget>[
-            data['entities']['media'].forEach((url) {
+            data['entitiesMedia'].forEach((url) {
               return Container(
                   width: 20,
                   height: 20,
@@ -33,7 +33,7 @@ dynamic viewImage(data) {
           ],
         );
       }
-      return Image.network(data['entities']['media'][0]['media_url'],
+      return Image.network(data['entitiesMedia'][0]['media_url'],
           fit: BoxFit.contain);
     }
     // else {

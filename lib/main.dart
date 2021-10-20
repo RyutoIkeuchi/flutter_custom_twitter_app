@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_twitter_app/models/home_timeline_model.dart';
+import 'package:flutter_custom_twitter_app/services/api.dart';
 import 'package:flutter_custom_twitter_app/services/homt_time_line.dart';
 import 'ui/components/templates/bottomtabs_navigation.dart';
 
-void main() async {
-  List<Set<HomeTimelineModel>> data = await getHomeTimelineData();
-  print(data);
+void main() {
   runApp(MyApp());
 }
 

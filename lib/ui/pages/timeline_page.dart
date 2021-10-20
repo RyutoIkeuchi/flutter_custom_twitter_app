@@ -1,4 +1,8 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_twitter_app/models/home_timeline_model.dart';
+import 'package:flutter_custom_twitter_app/services/homt_time_line.dart';
 import 'package:flutter_custom_twitter_app/ui/components/templates/retweet_card.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -11,12 +15,14 @@ import '../components/templates/drawer_view.dart';
 class TweetTimelineData extends ChangeNotifier {
   List<dynamic> data = [];
   Future<dynamic> getTweetTimelineData() async {
-    this.data = await getApi();
+    this.data = await getHomeTimelineData();
+    // this.data = await getApi();
+    // print(data);
     notifyListeners();
   }
 
   Future<dynamic> refresh() async {
-    this.data = await getApi();
+    this.data = await getHomeTimelineData();
     notifyListeners();
   }
 }
@@ -43,7 +49,7 @@ class Timeline extends StatelessWidget {
             ),
             drawer: DrawerView(),
             body: Consumer<TweetTimelineData>(builder: (context, model, child) {
-              final dynamic data = model.data;
+              List<dynamic> data = model.data;
               if (data == []) {
                 return CircularProgressIndicator();
               }
@@ -61,19 +67,12 @@ class Timeline extends StatelessWidget {
                           decoration: BoxDecoration(
                               border: Border(
                                   bottom: BorderSide(
-                                      color: Colors.black12, width: 1.0
-                                  )
-                              )
-                          ),
+                                      color: Colors.black12, width: 1.0))),
                           child: !checkTextData(data[index]['text'])
                               ? tweetCard(data[index])
-                              : reTweetCard(data[index])
-                      ); 
-                    }
-                ),
+                              : reTweetCard(data[index]));
+                    }),
               );
-            })
-        )
-    );
+            })));
   }
 }

@@ -18,7 +18,7 @@ final clientCredentials = oauth1.ClientCredentials(
 late final auth = oauth1.Authorization(clientCredentials, platform);
 oauth1.Credentials? tokenCredentials;
 
-Future<List<Set<HomeTimelineModel>>> getHomeTimelineData() async {
+Future<dynamic> getHomeTimelineData() async {
   final client = oauth1.Client(
     platform.signatureMethod,
     clientCredentials,
@@ -37,8 +37,17 @@ Future<List<Set<HomeTimelineModel>>> getHomeTimelineData() async {
   );
 
   if (res.statusCode == 200) {
-    final List<dynamic> jsonArray = jsonDecode(res.body);
-    return jsonArray.map((model) => {HomeTimelineModel.fromJson(model)}).toList();
+    var jsonArray = jsonDecode(res.body) as List;
+    final List<HomeTimelineModel> data =
+        jsonArray.map((model) => HomeTimelineModel.fromJson(model)).toList();
+    //     List<dynamic> jsonArray(String str) =>
+    // List<dynamic>.from(json.decode(str).map((x) => HomeTimelineModel.fromJson(x)));
+    // List<Store> stores = [];
+    // jsonArray.map((model) => Store.fromJson(model)).toList();
+    // print(stores);
+    var body = jsonEncode(data);
+    dynamic aaa = jsonDecode(body);
+    return aaa;
   } else {
     throw Exception('Failed to load album');
   }

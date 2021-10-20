@@ -49,13 +49,13 @@ bool checkTextData(text) {
 
 dynamic viewImage(data) {
   if (RegExp(r'https?://[a-zA-Z0-9\-%_/=&?.]+').hasMatch(data['text'])) {
-    if (data['entities']['media'] != null) {
+    if (data['entitiesMedia'] != null) {
       // print(data['entities']);
-      if (data['entities']['media'].length >= 2) {
+      if (data['entitiesMedia'].length >= 2) {
         return GridView.count(
           crossAxisCount: 2,
           children: <Widget>[
-            data['entities']['media'].forEach((url) {
+            data['entitiesMedia'].forEach((url) {
               return Container(
                   width: 20,
                   height: 20,
@@ -64,7 +64,7 @@ dynamic viewImage(data) {
           ],
         );
       }
-      return Image.network(data['entities']['media'][0]['media_url'],
+      return Image.network(data['entitiesMedia'][0]['media_url'],
           fit: BoxFit.contain);
     }
     // else {
@@ -94,7 +94,7 @@ Widget reTweetCard(dynamic data) {
           Expanded(
             flex: 7,
             child: Text(
-              '${data['user']['name']}さんがリツイート',
+              '${data['userName']}さんがリツイート',
               style: TextStyle(
                   fontSize: 10,
                   color: Colors.black54,
@@ -109,7 +109,7 @@ Widget reTweetCard(dynamic data) {
         children: [
           Flexible(
             flex: 1,
-            child: userIcon(data['retweeted_status']['user']['profile_image_url_https'])
+            child: userIcon(data['retweetedStatusUserprofileImageUrlHttps'])
           ),
           Expanded(
               flex: 4,
@@ -125,15 +125,15 @@ Widget reTweetCard(dynamic data) {
                                 children: [
                                   Flexible(
                                     flex: 5,
-                                    child: tweetUserName(data['entities']['user_mentions'][0]['name'])
+                                    child: tweetUserName(data['entitiesUserMentionsName'][0]['name'])
                                   ),
                                   Flexible(
-                                    child:tweetUserId(data['user']['screen_name'])
+                                    child:tweetUserId(data['userId'])
                                   ),
                                   Expanded(
                                     flex: 2,
                                     child: Text(
-                                      tweetTimeDate(data['created_at']),
+                                      tweetTimeDate(data['createdAt']),
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: Colors.black54,
