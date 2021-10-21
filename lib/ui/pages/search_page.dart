@@ -29,7 +29,14 @@ class TweetTimelineData extends ChangeNotifier {
   }
 }
 
-class Search extends StatelessWidget {
+class Search extends StatefulWidget {
+  @override
+  _SearchState createState() => _SearchState();
+}
+
+class _SearchState extends State<Search> {
+  FocusNode _focus = new FocusNode();
+  bool _isFocus = false;
   final dateNow = DateTime.now();
 
   bool checkTextData(text) {
@@ -39,6 +46,17 @@ class Search extends StatelessWidget {
     } else {
       return false;
     }
+  }
+
+  void initState() {
+    super.initState();
+    _focus.addListener(_onFocusChange);
+  }
+
+  void _onFocusChange() {
+    setState(() {
+      _isFocus = _focus.hasFocus;
+    });
   }
 
   // void _handleText(String e) {
@@ -55,36 +73,53 @@ class Search extends StatelessWidget {
           width: 260,
           height: 40,
           // padding:EdgeInsets.only(right: 10, bottom: 30, left: 10),s
-          child:TextField(
-             style: TextStyle(
-                height: 0.9,
-                fontSize: 15,              
-             ),
+          child: TextField(
+            focusNode: _focus,
+            textInputAction: TextInputAction.search,
+            style: TextStyle(
+              height: 0.9,
+              fontSize: 15,
+            ),
             decoration: InputDecoration(
-              // border: InputBorder.none,
-              border:OutlineInputBorder(borderRadius: BorderRadius.circular(30.0)),
-              fillColor: Colors.black12,
-              filled: true,
-              prefixIcon:Icon(Icons.search,size: 20),
-              contentPadding: EdgeInsets.all(10.0),
-              hintText: 'キーワード検索'
-            ),        
+                // border: InputBorder.none,
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30.0)),
+                fillColor: Colors.white,
+                filled: true,
+                prefixIcon: Icon(Icons.search, size: 20),
+                contentPadding: EdgeInsets.all(10.0),
+                hintText: 'キーワード検索'),
           ),
         ),
-        leading:IconButton(
+        leading: _isFocus ? IconButton(
           icon: CircleAvatar(
             child: Icon(Icons.people),
             backgroundColor: Colors.red,
             radius: 16,
           ),
-          onPressed: () {
-
-          },
-        ),
-      ), 
-      body:searchTweet(),
+          onPressed: () {},
+        ) : null,
+        actions: _isFocus ? null : [
+          Container(
+            height: 40,
+            padding: EdgeInsets.only(top: 18),
+            margin: EdgeInsets.only(left: 10,right: 20),
+            child: Text('キャンセル')
+          )
+        ],
+      ),
+      body: _isFocus
+          ? searchTweet()
+          : searchForm()
     );
   }
+}
+
+Widget searchForm() {
+  return Container(
+    padding: EdgeInsets.all(10),
+    child: Text('アカウント・トッピク、またはキーワードを検索してみましょう'),
+  );
 }
 
 Widget searchTweet() {
@@ -96,24 +131,24 @@ Widget searchTweet() {
           return CircularProgressIndicator();
         }
         return RefreshIndicator(
-            onRefresh: () async {
-              print('リフレッシュします');
-              await TweetTimelineData().refresh();
-            },
-            child:ListView.builder(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  itemCount: data.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(
-                                    color: Colors.black12, width: 1.0))),
-                        child: !checkTextData(data[index]['text'])
-                            ? tweetCard(data[index])
-                            : reTweetCard(data[index]));
-                  }),
-            );
+          onRefresh: () async {
+            print('リフレッシュします');
+            await TweetTimelineData().refresh();
+          },
+          child: ListView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: data.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        border: Border(
+                            bottom:
+                                BorderSide(color: Colors.black12, width: 1.0))),
+                    child: !checkTextData(data[index]['text'])
+                        ? tweetCard(data[index])
+                        : reTweetCard(data[index]));
+              }),
+        );
       }));
 }
