@@ -1,81 +1,79 @@
-import 'dart:convert';
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
-import 'package:oauth1/oauth1.dart' as oauth1;
+import 'package:flutter_custom_twitter_app/models/home_timeline_model.dart';
+import 'package:flutter_custom_twitter_app/services/home_time_line.dart';
+import 'package:flutter_custom_twitter_app/services/search_tweet_api.dart';
+import 'package:flutter_custom_twitter_app/ui/components/templates/retweet_card.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
-import '../../../config.dart';
+import 'package:flutter_custom_twitter_app/ui/components/templates/tweet_card.dart';
+import 'package:flutter_custom_twitter_app/ui/components/templates/drawer_view.dart';
+import '../../services/api.dart';
+import '../components/templates/drawer_view.dart';
 
-class Search extends StatefulWidget {
-  @override
-  _Search createState() => _Search();
-}
-
-class _Search extends State<Search> {
-  List<dynamic> _data = [];
-  final controller = TextEditingController();
-  final platform = oauth1.Platform(
-    'https://api.twitter.com/oauth/request_token',
-    'https://api.twitter.com/oauth/authorize',
-    'https://api.twitter.com/oauth/access_token',
-    oauth1.SignatureMethods.hmacSha1,
-  );
-
-  final clientCredentials = oauth1.ClientCredentials(
-    TWITTER_API_KEY,
-    TWITTER_API_KEY_SECRET,
-  );
-
-  late final auth = oauth1.Authorization(clientCredentials, platform);
-  oauth1.Credentials? tokenCredentials;
-
-  @override
-  void initState() {
-    super.initState();
-    getApi();
+class TweetTimelineData extends ChangeNotifier {
+  List<dynamic> data = [];
+  Future<dynamic> getTweetTimelineData() async {
+    this.data = await getSearchTweetApi();
+    // this.data = await getApi();
+    // print(data);
+    notifyListeners();
   }
 
-  Future<dynamic> getApi() async {
-    // OauthToken();
-    final client = oauth1.Client(
-      platform.signatureMethod,
-      clientCredentials,
-      oauth1.Credentials(
-        ACCESS_TOKEN,
-        ACCESS_TOKEN_SECRET,
-      ),
-    );
-    final res = await client.get(
-      Uri.https(
-        'api.twitter.com',
-        '/1.1/search/tweets.json',
-        {
-          'q': 'flutter',
-          'lang': 'ja',
-          'count': '50',
-        },
-      ),
-    );
-    Map<String, dynamic> body = jsonDecode(res.body);
-    List<dynamic> data = body['statuses'];
-    print(data);
-    setState(() {
-      _data = data;
-    });
+  Future<dynamic> refresh() async {
+    this.data = await getSearchTweetApi();
+    notifyListeners();
+  }
+}
+
+class Search extends StatelessWidget {
+  final dateNow = DateTime.now();
+
+  bool checkTextData(text) {
+    var match = RegExp('^RT').hasMatch(text);
+    if (match) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: FaIcon(FontAwesomeIcons.twitter)),
-      body: ListView.builder(
-          itemCount: _data.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-                padding: EdgeInsets.all(10),
-                decoration:
-                    BoxDecoration(border: Border.all(color: Colors.black26)),
-                child: ListTile(title: Text(_data[index]['text'])));
-          }),
-    );
+    return ChangeNotifierProvider<TweetTimelineData>(
+        create: (_) => TweetTimelineData()..getTweetTimelineData(),
+        child: Scaffold(
+            appBar: AppBar(
+              title: FaIcon(FontAwesomeIcons.twitter),
+            ),
+            drawer: DrawerView(),
+            body: Consumer<TweetTimelineData>(builder: (context, model, child) {
+              List<dynamic> data = model.data;
+              if (data == []) {
+                return CircularProgressIndicator();
+              }
+              return RefreshIndicator(
+                onRefresh: () async {
+                  print('リフレッシュします');
+                  await TweetTimelineData().refresh();
+                },
+                child: ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemCount: data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      color: Colors.black12, width: 1.0))),
+                          child: !checkTextData(data[index]['text'])
+                              ? tweetCard(data[index])
+                              : reTweetCard(data[index]));
+                    }),
+              );
+            })));
   }
 }
