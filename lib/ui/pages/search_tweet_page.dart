@@ -6,6 +6,7 @@ import 'package:flutter_custom_twitter_app/models/home_timeline_model.dart';
 import 'package:flutter_custom_twitter_app/services/home_time_line.dart';
 import 'package:flutter_custom_twitter_app/services/search_tweet_api.dart';
 import 'package:flutter_custom_twitter_app/ui/components/templates/retweet_card.dart';
+import 'package:flutter_custom_twitter_app/ui/pages/search_tweet_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -16,27 +17,40 @@ import '../components/templates/drawer_view.dart';
 
 class TweetTimelineData extends ChangeNotifier {
   List<dynamic> data = [];
-  Future<dynamic> getTweetTimelineData() async {
-    this.data = await getSearchTweetApi();
+  Future<dynamic> getTweetTimelineData(word) async {
+    this.data = await getSearchTweetApi(word);
     // this.data = await getApi();
     // print(data);
     notifyListeners();
   }
 
   Future<dynamic> refresh() async {
-    this.data = await getSearchTweetApi();
+    this.data = await getSearchTweetApi('flutter');
     notifyListeners();
   }
 }
 
-class Search extends StatefulWidget {
+class SearchTweetPage extends StatefulWidget {
+  final String e;
+
+  const SearchTweetPage({
+    Key? key,
+    required this.e,
+  }) : super(key: key);
+
   @override
-  _SearchState createState() => _SearchState();
+  _SearchTweetPageState createState() => _SearchTweetPageState(text: e);
 }
 
-class _SearchState extends State<Search> {
+class _SearchTweetPageState extends State<SearchTweetPage> {
+  final  String text;
+  _SearchTweetPageState({
+    required this.text,
+  });
   FocusNode _focus = new FocusNode();
   bool _isFocus = false;
+  bool _word = false;
+  String _text = '';
   final dateNow = DateTime.now();
 
   bool checkTextData(text) {
@@ -59,59 +73,76 @@ class _SearchState extends State<Search> {
     });
   }
 
-  // void _handleText(String e) {
-  //   setState(() {
-  //     _text = e;
-  //   });
-  // }
+  void _handleText(String e) {
+    setState(() {
+      _text = e;
+    });
+  }
+
+  void changeWord() {
+    _word = true;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Container(
-          width: 260,
-          height: 40,
-          // padding:EdgeInsets.only(right: 10, bottom: 30, left: 10),s
-          child: TextField(
-            focusNode: _focus,
-            textInputAction: TextInputAction.search,
-            style: TextStyle(
-              height: 0.9,
-              fontSize: 15,
-            ),
-            decoration: InputDecoration(
-                // border: InputBorder.none,
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30.0)),
-                fillColor: Colors.white,
-                filled: true,
-                prefixIcon: Icon(Icons.search, size: 20),
-                contentPadding: EdgeInsets.all(10.0),
-                hintText: 'キーワード検索'),
-          ),
-        ),
-        leading: _isFocus ? IconButton(
-          icon: CircleAvatar(
-            child: Icon(Icons.people),
-            backgroundColor: Colors.red,
-            radius: 16,
-          ),
-          onPressed: () {},
-        ) : null,
-        actions: _isFocus ? null : [
-          Container(
+        appBar: AppBar(
+          title: Container(
+            width: 260,
             height: 40,
-            padding: EdgeInsets.only(top: 18),
-            margin: EdgeInsets.only(left: 10,right: 20),
-            child: Text('キャンセル')
-          )
-        ],
-      ),
-      body: _isFocus
-          ? searchTweet()
-          : searchForm()
-    );
+            child: TextField(
+              focusNode: _focus,
+              textInputAction: TextInputAction.search,
+              onSubmitted: (e) {
+                print(e);
+                changeWord();
+                TweetTimelineData()..getTweetTimelineData(e);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SearchTweetPage(e: _text,)));
+              },
+              onChanged: (String e) {
+                setState(() {
+                  _text = e;
+                });
+              },
+              style: TextStyle(
+                height: 0.9,
+                fontSize: 15,
+              ),
+              decoration: InputDecoration(
+                  // border: InputBorder.none,
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30.0)),
+                  fillColor: Colors.white,
+                  filled: true,
+                  prefixIcon: Icon(Icons.search, size: 20),
+                  contentPadding: EdgeInsets.all(10.0),
+                  hintText: 'キーワード検索'),
+            ),
+          ),
+          leading: !_isFocus
+              ? IconButton(
+                  icon: CircleAvatar(
+                    child: Icon(Icons.people),
+                    backgroundColor: Colors.red,
+                    radius: 16,
+                  ),
+                  onPressed: () {
+                    _isFocus = false;
+                  },
+                )
+              : null,
+          actions: _isFocus
+              ? [
+                  Container(
+                      height: 40,
+                      padding: EdgeInsets.only(top: 18),
+                      margin: EdgeInsets.only(left: 10, right: 20),
+                      child: Text('キャンセル'))
+                ]
+              : null,
+        ),
+        body: _isFocus ? searchForm() : searchTweet(text));
   }
 }
 
@@ -122,9 +153,9 @@ Widget searchForm() {
   );
 }
 
-Widget searchTweet() {
+Widget searchTweet(e) {
   return ChangeNotifierProvider<TweetTimelineData>(
-      create: (_) => TweetTimelineData()..getTweetTimelineData(),
+      create: (_) => TweetTimelineData()..getTweetTimelineData(e),
       child: Consumer<TweetTimelineData>(builder: (context, model, child) {
         List<dynamic> data = model.data;
         if (data == []) {

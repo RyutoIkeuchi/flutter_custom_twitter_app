@@ -18,7 +18,7 @@ final clientCredentials = oauth1.ClientCredentials(
 late final auth = oauth1.Authorization(clientCredentials, platform);
 oauth1.Credentials? tokenCredentials;
 
-Future<dynamic> getSearchTweetApi() async {
+Future<dynamic> getSearchTweetApi(word) async {
   // OauthToken();
   final client = oauth1.Client(
     platform.signatureMethod,
@@ -33,7 +33,7 @@ Future<dynamic> getSearchTweetApi() async {
       'api.twitter.com',
       '/1.1/search/tweets.json',
       {
-        'q': 'flutter',
+        'q': word,
         'lang': 'ja',
         'count': '50',
       },
