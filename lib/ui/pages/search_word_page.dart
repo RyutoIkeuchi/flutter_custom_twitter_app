@@ -1,12 +1,7 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_custom_twitter_app/ui/components/templates/retweet_card.dart';
-import 'package:flutter_custom_twitter_app/ui/pages/search_tweet_page.dart';
-import 'package:provider/provider.dart';
 
-import 'package:flutter_custom_twitter_app/ui/components/templates/tweet_card.dart';
+import 'package:flutter_custom_twitter_app/ui/pages/search_tweet_page.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -90,7 +85,8 @@ class _SearchState extends State<Search> {
                 ]
               : null,
         ),
-        body: _isFocus ? searchForm() : searchWord());
+        body: _isFocus ? searchForm() : searchWord()
+    );
   }
 }
 

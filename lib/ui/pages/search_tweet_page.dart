@@ -1,26 +1,15 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_custom_twitter_app/models/home_timeline_model.dart';
-import 'package:flutter_custom_twitter_app/services/home_time_line.dart';
-import 'package:flutter_custom_twitter_app/services/search_tweet_api.dart';
-import 'package:flutter_custom_twitter_app/ui/components/templates/retweet_card.dart';
-import 'package:flutter_custom_twitter_app/ui/pages/search_tweet_page.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
+import 'package:flutter_custom_twitter_app/services/search_tweet_api.dart';
+import 'package:flutter_custom_twitter_app/ui/components/templates/retweet_card.dart';
 import 'package:flutter_custom_twitter_app/ui/components/templates/tweet_card.dart';
-import 'package:flutter_custom_twitter_app/ui/components/templates/drawer_view.dart';
-import '../../services/api.dart';
-import '../components/templates/drawer_view.dart';
 
 class TweetTimelineData extends ChangeNotifier {
-  List<dynamic> data = [];
+  List data = [];
   Future<dynamic> getTweetTimelineData(word) async {
     this.data = await getSearchTweetApi(word);
-    // this.data = await getApi();
-    // print(data);
     notifyListeners();
   }
 
@@ -142,7 +131,8 @@ class _SearchTweetPageState extends State<SearchTweetPage> {
                 ]
               : null,
         ),
-        body: _isFocus ? searchForm() : searchTweet(text));
+        body: _isFocus ? searchForm() : searchTweet(text)
+    );
   }
 }
 

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_twitter_app/models/home_timeline_model.dart';
-import 'package:flutter_custom_twitter_app/services/api.dart';
 import 'package:flutter_custom_twitter_app/ui/components/templates/bottomtabs_navigation.dart';
 import 'ui/components/templates/bottomtabs_navigation.dart';
 

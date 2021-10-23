@@ -145,18 +145,21 @@ Widget reTweetCard(dynamic data) {
                         ),
                         Flexible(
                           child: Container(
-                              child: FaIcon(
-                            FontAwesomeIcons.ellipsisH,
-                            size: 16,
-                            color: Colors.black12,
-                          )),
+                            child: FaIcon(
+                              FontAwesomeIcons.ellipsisH,
+                              size: 16,
+                              color: Colors.black12,
+                            )
+                          ),
                         ),
                       ],
                     ),
                     Container(child: Text(replaceText(data['text']))),
                     Container(child: viewImage(data)),
                     tweetBottomView(data),
-                  ]))
+                  ]
+              )
+          )
         ],
       )
     ],

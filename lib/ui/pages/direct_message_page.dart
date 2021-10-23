@@ -19,5 +19,4 @@ class DirectMessage extends StatelessWidget {
         )
     );
   }
-
 }

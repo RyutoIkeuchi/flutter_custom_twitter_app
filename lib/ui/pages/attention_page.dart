@@ -19,5 +19,4 @@ class Attention extends StatelessWidget {
         )
     );
   }
-
 }

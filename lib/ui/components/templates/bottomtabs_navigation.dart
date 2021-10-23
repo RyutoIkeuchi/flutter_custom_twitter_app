@@ -13,7 +13,6 @@ class BottomTabsNavigation extends StatefulWidget {
 
 class _BottomTabsNavigationState extends State<BottomTabsNavigation> {
   int _currentIndex = 0;
-  // void _onItemTapped(int index) => setState(()=>_currentIndex = index);
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +67,8 @@ class _BottomTabsNavigationState extends State<BottomTabsNavigation> {
                 return Timeline();
               });
           }
-        });
+        }
+    );
   }
 
   void _onItemTapped(int index) => setState(() => _currentIndex = index);

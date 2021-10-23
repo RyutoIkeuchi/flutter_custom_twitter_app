@@ -22,5 +22,4 @@ class DrawerView extends StatelessWidget {
         ),
       );
   }
-
 }

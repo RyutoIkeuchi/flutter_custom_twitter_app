@@ -49,8 +49,7 @@ Widget tweetUserInfo(dynamic data) {
                   ),
                 ),
               ],
-            ),
-        
+            ),      
       ),
       Flexible(
         child: Container(
