@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_custom_twitter_app/ui/components/atoms/search_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter_custom_twitter_app/services/search_tweet_api.dart';
@@ -20,21 +21,21 @@ class TweetTimelineData extends ChangeNotifier {
 }
 
 class SearchTweetPage extends StatefulWidget {
-  final String e;
+  final String word;
 
   const SearchTweetPage({
     Key? key,
-    required this.e,
+    required this.word,
   }) : super(key: key);
 
   @override
-  _SearchTweetPageState createState() => _SearchTweetPageState(text: e);
+  _SearchTweetPageState createState() => _SearchTweetPageState(word:word);
 }
 
 class _SearchTweetPageState extends State<SearchTweetPage> {
-  final  String text;
+  final  String word;
   _SearchTweetPageState({
-    required this.text,
+    required this.word,
   });
   FocusNode _focus = new FocusNode();
   bool _isFocus = false;
@@ -87,7 +88,7 @@ class _SearchTweetPageState extends State<SearchTweetPage> {
                 changeWord();
                 TweetTimelineData()..getTweetTimelineData(e);
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SearchTweetPage(e: _text,)));
+                    MaterialPageRoute(builder: (context) => SearchTweetPage(word: _text,)));
               },
               onChanged: (String e) {
                 setState(() {
@@ -131,16 +132,9 @@ class _SearchTweetPageState extends State<SearchTweetPage> {
                 ]
               : null,
         ),
-        body: _isFocus ? searchForm() : searchTweet(text)
+        body: _isFocus ? searchScreen() : searchTweet(word)
     );
   }
-}
-
-Widget searchForm() {
-  return Container(
-    padding: EdgeInsets.all(10),
-    child: Text('アカウント・トッピク、またはキーワードを検索してみましょう'),
-  );
 }
 
 Widget searchTweet(e) {

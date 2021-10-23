@@ -54,7 +54,7 @@ Future<dynamic> getSearchTweetApi(word) async {
     // print(stores);
     var body = jsonEncode(data);
     dynamic aaa = jsonDecode(body);
-    print(aaa);
+    // print(aaa);
     return aaa;
   } else {
     throw Exception('Failed to load album');
