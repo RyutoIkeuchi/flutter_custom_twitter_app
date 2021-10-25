@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_twitter_app/ui/pages/search_tweet_page.dart';
 import 'package:flutter/services.dart';
 
 Widget searchForm(data, bool isWord) {

@@ -39,21 +39,14 @@ Future<dynamic> getSearchTweetApi(word) async {
       },
     ),
   );
-  // Map<String, dynamic> body = jsonDecode(res.body);
-  // List<dynamic> data = body['statuses'];
-  // print(data);
   if (res.statusCode == 200) {
     var jsonArray = jsonDecode(res.body);
     jsonArray = jsonArray['statuses'];
     final List<dynamic> data =
         jsonArray.map((model) => HomeTimelineModel.fromJson(model)).toList();
-    //     List<dynamic> jsonArray(String str) =>
-    // List<dynamic>.from(json.decode(str).map((x) => HomeTimelineModel.fromJson(x)));
-    // List<Store> stores = [];
-    // jsonArray.map((model) => Store.fromJson(model)).toList();
-    // print(stores);
     var body = jsonEncode(data);
-    dynamic aaa = jsonDecode(body);
+    print(data);
+    List<dynamic> aaa = jsonDecode(body);
     // print(aaa);
     return aaa;
   } else {

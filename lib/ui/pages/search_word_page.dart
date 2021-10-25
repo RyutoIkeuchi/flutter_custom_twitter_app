@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import 'package:flutter_custom_twitter_app/ui/components/atoms/search_screen.dart';
 import 'package:flutter_custom_twitter_app/services/search_tweet_api.dart';
-import 'package:flutter_custom_twitter_app/ui/pages/search_tweet_page.dart';
 import 'package:flutter_custom_twitter_app/ui/components/templates/retweet_card.dart';
 import 'package:flutter_custom_twitter_app/ui/components/templates/tweet_card.dart';
 
@@ -15,8 +14,8 @@ class TweetTimelineData extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<dynamic> refresh() async {
-    this.data = await getSearchTweetApi('flutter');
+  Future<dynamic> refresh(word) async {
+    this.data = await getSearchTweetApi(word);
     notifyListeners();
   }
 }
@@ -43,7 +42,6 @@ class _SearchState extends State<Search> {
   FocusNode _focus = new FocusNode();
   bool _isFocus = false;
   bool _isWord = false;
-  String _text = 'flutter';
 
   void initState() {
     super.initState();
@@ -51,8 +49,6 @@ class _SearchState extends State<Search> {
     if (word != null) {
       _isWord = true;
     }
-    print('何も入っていないはず$word');
-    print(_isWord);
   }
 
   void _onFocusChange() {
@@ -63,25 +59,23 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = TextEditingController();
+    controller.text = (word != null ? word : '')!;
     return Scaffold(
         appBar: AppBar(
           title: Container(
             width: 260,
             height: 40,
             child: TextField(
+               controller: controller,
+              maxLines: 1,
               focusNode: _focus,
               textInputAction: TextInputAction.search,
-              onChanged: (e) {
-                setState(() {
-                  _text = e;
-                });
-              },
               onSubmitted: (word) {
                 if (word != '') {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Search(word: word)),
+                    context,
+                    MaterialPageRoute(builder: (context) => Search(word: word)),
                   );
                 }
               },
@@ -135,14 +129,14 @@ class _SearchState extends State<Search> {
           onDismissed: (DismissDirection direction) {
             setState(() {
               _isWord = false;
-              print('スワイプしました');
             });
           },
           key: UniqueKey(),
           child: _isFocus
               ? searchScreen()
-              : (_isWord ? searchTweet(_text) : searchWordScreen()),
-        ));
+              : (_isWord ? searchTweet(word!) : searchWordScreen()),
+        )
+    );
   }
 }
 
@@ -163,8 +157,7 @@ Widget searchTweet(String word) {
         }
         return RefreshIndicator(
           onRefresh: () async {
-            print('リフレッシュします');
-            await TweetTimelineData().refresh();
+            await TweetTimelineData().refresh(word);
           },
           child: ListView.builder(
               physics: const AlwaysScrollableScrollPhysics(),
