@@ -10,31 +10,6 @@ class HomeTimelineModel {
   String? retweetedStatusUserprofileImageUrlHttps;
   List<dynamic>? entitiesUserMentionsName;
 
-  // HomeTimelineModel(
-  //   String createdAt,
-  //   String text,
-  //   String profileImageUrl,
-  //   String userName,
-  //   String userId,
-  //   num retweetCount,
-  //   num favoriteCount,
-  //   List<dynamic> entitiesMedia,
-  //   String retweetedStatusUserprofileImageUrlHttps,
-  //   List<dynamic> entitiesUserMentionsName,
-  // ) {
-  //   this.createdAt = createdAt;
-  //   this.text = text;
-  //   this.profileImageUrl = profileImageUrl;
-  //   this.userName = userName;
-  //   this.userId = userId;
-  //   this.retweetCount = retweetCount;
-  //   this.favoriteCount = favoriteCount;
-  //   this.entitiesMedia = entitiesMedia;
-  //   this.retweetedStatusUserprofileImageUrlHttps =
-  //       retweetedStatusUserprofileImageUrlHttps;
-  //   this.entitiesUserMentionsName = entitiesUserMentionsName;
-  // }
-
   HomeTimelineModel({
     this.createdAt,
     this.text,

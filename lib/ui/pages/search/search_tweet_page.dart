@@ -40,12 +40,15 @@ Widget searchTweet(String word) {
                   decoration: BoxDecoration(
                       border: Border(
                           bottom:
-                              BorderSide(color: Colors.black12, width: 1.0))),
+                              BorderSide(color: Colors.black12, width: 1.0))
+                  ),
                   child: !checkTextData(data[index]['text'])
                       ? tweetCard(data[index])
                       : reTweetCard(data[index]),
                 );
-              }),
+              }
+          ),
         );
-      }));
+      })
+  );
 }

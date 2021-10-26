@@ -43,27 +43,22 @@ class _BottomTabsNavigationState extends State<BottomTabsNavigation> {
           switch (index) {
             case 0:
               return CupertinoTabView(builder: (context) {
-                // 1番左のタブが選ばれた時の画面
                 return Timeline();
               });
-            case 1: // ほぼ同じなので割愛
+            case 1: 
               return CupertinoTabView(builder: (context) {
-                // 1番左のタブが選ばれた時の画面
                 return Search();
               });
-            case 2: // ほぼ同じなので割愛
+            case 2:
               return CupertinoTabView(builder: (context) {
-                // 1番左のタブが選ばれた時の画面
                 return Attention();
               });
-            case 3: // ほぼ同じなので割愛
+            case 3:
               return CupertinoTabView(builder: (context) {
-                // 1番左のタブが選ばれた時の画面
                 return DirectMessage();
               });
             default:
               return CupertinoTabView(builder: (context) {
-                // 1番左のタブが選ばれた時の画面
                 return Timeline();
               });
           }

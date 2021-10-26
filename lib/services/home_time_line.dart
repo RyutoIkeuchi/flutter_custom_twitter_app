@@ -1,4 +1,4 @@
-import 'package:flutter_custom_twitter_app/models/home_timeline_model.dart';
+import 'package:flutter_custom_twitter_app/models/home_timeline_tweet_model.dart';
 import 'package:oauth1/oauth1.dart' as oauth1;
 import '../../../config.dart';
 import 'dart:convert';
@@ -40,11 +40,6 @@ Future<dynamic> getHomeTimelineData() async {
     var jsonArray = jsonDecode(res.body) as List;
     final List<HomeTimelineModel> data =
         jsonArray.map((model) => HomeTimelineModel.fromJson(model)).toList();
-    //     List<dynamic> jsonArray(String str) =>
-    // List<dynamic>.from(json.decode(str).map((x) => HomeTimelineModel.fromJson(x)));
-    // List<Store> stores = [];
-    // jsonArray.map((model) => Store.fromJson(model)).toList();
-    // print(stores);
     var body = jsonEncode(data);
     dynamic aaa = jsonDecode(body);
     return aaa;

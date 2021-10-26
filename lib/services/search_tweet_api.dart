@@ -1,4 +1,4 @@
-import 'package:flutter_custom_twitter_app/models/home_timeline_model.dart';
+import 'package:flutter_custom_twitter_app/models/home_timeline_tweet_model.dart';
 import 'package:oauth1/oauth1.dart' as oauth1;
 import '../../../config.dart';
 import 'dart:convert';
@@ -45,9 +45,7 @@ Future<dynamic> getSearchTweetApi(word) async {
     final List<dynamic> data =
         jsonArray.map((model) => HomeTimelineModel.fromJson(model)).toList();
     var body = jsonEncode(data);
-    print(data);
     List<dynamic> aaa = jsonDecode(body);
-    // print(aaa);
     return aaa;
   } else {
     throw Exception('Failed to load album');

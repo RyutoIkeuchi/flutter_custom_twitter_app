@@ -1,3 +1,4 @@
+import 'package:flutter_custom_twitter_app/models/trend_word_model.dart';
 import 'package:oauth1/oauth1.dart' as oauth1;
 import '../../../config.dart';
 import 'dart:convert';
@@ -17,7 +18,7 @@ final clientCredentials = oauth1.ClientCredentials(
 late final auth = oauth1.Authorization(clientCredentials, platform);
 oauth1.Credentials? tokenCredentials;
 
-Future<dynamic> getApi() async {
+Future<dynamic> getTrendApi() async {
   final client = oauth1.Client(
     platform.signatureMethod,
     clientCredentials,
@@ -28,13 +29,13 @@ Future<dynamic> getApi() async {
   );
 
   final res = await client.get(
-    Uri.https(
-      'api.twitter.com',
-      '/1.1/statuses/home_timeline.json',
-      {'count': '100'},
-    ),
+    Uri.parse('https://api.twitter.com/1.1/trends/place.json?id=1118370'),
   );
 
-  final dynamic data = jsonDecode(res.body);
-  return data;
+  dynamic data = jsonDecode(res.body);
+  final List<dynamic> response =
+        data[0]['trends'].map((model) => TrendTweetModel.fromJson(model)).toList();
+         var body = jsonEncode(response);
+    dynamic aaa = jsonDecode(body);
+  return aaa;
 }
