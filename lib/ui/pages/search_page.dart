@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_custom_twitter_app/services/tweet_trend_api.dart';
+import 'package:flutter_custom_twitter_app/ui/pages/search/search_trend_page.dart';
+import 'package:flutter_custom_twitter_app/ui/pages/search/search_tweet_page.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter_custom_twitter_app/ui/components/atoms/search_screen.dart';
@@ -7,18 +10,7 @@ import 'package:flutter_custom_twitter_app/services/search_tweet_api.dart';
 import 'package:flutter_custom_twitter_app/ui/components/templates/retweet_card.dart';
 import 'package:flutter_custom_twitter_app/ui/components/templates/tweet_card.dart';
 
-class TweetTimelineData extends ChangeNotifier {
-  List data = [];
-  Future<dynamic> getTweetTimelineData(word) async {
-    this.data = await getSearchTweetApi(word);
-    notifyListeners();
-  }
 
-  Future<dynamic> refresh(word) async {
-    this.data = await getSearchTweetApi(word);
-    notifyListeners();
-  }
-}
 
 class Search extends StatefulWidget {
   final String? word;
@@ -67,7 +59,7 @@ class _SearchState extends State<Search> {
             width: 260,
             height: 40,
             child: TextField(
-               controller: controller,
+              controller: controller,
               maxLines: 1,
               focusNode: _focus,
               textInputAction: TextInputAction.search,
@@ -135,45 +127,6 @@ class _SearchState extends State<Search> {
           child: _isFocus
               ? searchScreen()
               : (_isWord ? searchTweet(word!) : searchWordScreen()),
-        )
-    );
+        ));
   }
-}
-
-Widget searchWordScreen() {
-  return Container(
-    padding: EdgeInsets.all(20),
-    child: Text('トレンドなどなど'),
-  );
-}
-
-Widget searchTweet(String word) {
-  return ChangeNotifierProvider<TweetTimelineData>(
-      create: (_) => TweetTimelineData()..getTweetTimelineData(word),
-      child: Consumer<TweetTimelineData>(builder: (context, model, child) {
-        List<dynamic> data = model.data;
-        if (data == []) {
-          return CircularProgressIndicator();
-        }
-        return RefreshIndicator(
-          onRefresh: () async {
-            await TweetTimelineData().refresh(word);
-          },
-          child: ListView.builder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: data.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      border: Border(
-                          bottom:
-                              BorderSide(color: Colors.black12, width: 1.0))),
-                  child: !checkTextData(data[index]['text'])
-                      ? tweetCard(data[index])
-                      : reTweetCard(data[index]),
-                );
-              }),
-        );
-      }));
 }

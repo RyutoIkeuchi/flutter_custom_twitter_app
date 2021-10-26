@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../pages/timeline_page.dart';
-import '../../pages/search_word_page.dart';
+import '../../pages/search_page.dart';
 import '../../pages/attention_page.dart';
 import '../../pages/direct_message_page.dart';
 
