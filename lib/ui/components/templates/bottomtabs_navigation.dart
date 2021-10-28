@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../pages/timeline_page.dart';
 import '../../pages/search_page.dart';
 import '../../pages/attention_page.dart';
-import '../../pages/direct_message_page.dart';
+import '../../pages/account_page.dart';
 
 class BottomTabsNavigation extends StatefulWidget {
   @override
@@ -55,7 +55,7 @@ class _BottomTabsNavigationState extends State<BottomTabsNavigation> {
               });
             case 3:
               return CupertinoTabView(builder: (context) {
-                return DirectMessage();
+                return Account();
               });
             default:
               return CupertinoTabView(builder: (context) {

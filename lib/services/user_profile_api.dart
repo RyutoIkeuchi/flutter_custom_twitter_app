@@ -1,4 +1,3 @@
-import 'package:flutter_custom_twitter_app/models/trend_word_model.dart';
 import 'package:oauth1/oauth1.dart' as oauth1;
 import '../../../config.dart';
 import 'dart:convert';
@@ -29,10 +28,10 @@ Future<dynamic> getUserProfileApi() async {
   );
 
   final res = await client.get(
-    Uri.parse('https://api.twitter.com/2/users/1262567497795907584/tweets?expansions=author_id&tweet.fields=created_at,author_id,public_metrics,context_annotations&user.fields=created_at,description,public_metrics,profile_image_url,location'),
+    Uri.parse(
+        'https://api.twitter.com/2/users/1262567497795907584?user.fields=created_at,description,public_metrics,profile_image_url,location'),
   );
 
   dynamic data = jsonDecode(res.body);
-  print(data['data'][0]);
   return data;
 }

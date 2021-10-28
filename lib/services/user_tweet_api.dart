@@ -1,5 +1,4 @@
 import 'package:flutter_custom_twitter_app/models/home_timeline_tweet_model.dart';
-import 'package:flutter_custom_twitter_app/models/trend_word_model.dart';
 import 'package:oauth1/oauth1.dart' as oauth1;
 import '../../../config.dart';
 import 'dart:convert';
@@ -34,11 +33,10 @@ Future<dynamic> getUserTweetApi() async {
   );
 
   dynamic data = jsonDecode(res.body);
-   final tweetData = data
-        .map((model) => HomeTimelineModel.fromJson(model))
-        .toList();
-    var body = jsonEncode(tweetData);
-    List<dynamic> aaa = jsonDecode(body);
-  print(aaa);
+  final tweetData = data
+      .map((model) => HomeTimelineModel.fromJson(model))
+      .toList();
+  var body = jsonEncode(tweetData);
+  List<dynamic> aaa = jsonDecode(body);
   return aaa;
 }
