@@ -27,38 +27,32 @@ Widget tweetUserInfo(dynamic data) {
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       Flexible(
-          flex: 11,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Flexible(
-                  flex: 5,
-                  child: tweetUserName(data['userName'])
+        flex: 11,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Flexible(flex: 5, child: tweetUserName(data['userName'])),
+            Flexible(child: tweetUserId(data['userId'])),
+            Expanded(
+              flex: 2,
+              child: Text(
+                tweetTimeDate(data['createdAt']),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.black54,
                 ),
-                Flexible(
-                  child: tweetUserId(data['userId'])
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Text(
-                    tweetTimeDate(data['createdAt']),
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.black54,
-                    ),
-                  ),
-                ),
-              ],
-            ),      
+              ),
+            ),
+          ],
+        ),
       ),
       Flexible(
         child: Container(
             child: FaIcon(
-              FontAwesomeIcons.ellipsisH,
-              size: 16,
-              color: Colors.black12,
-            )
-        ),
+          FontAwesomeIcons.ellipsisH,
+          size: 16,
+          color: Colors.black12,
+        )),
       ),
     ],
   );
