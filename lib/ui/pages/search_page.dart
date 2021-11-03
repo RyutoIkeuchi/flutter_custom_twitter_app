@@ -13,7 +13,7 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   FocusNode _focus = new FocusNode();
   bool _isFocus = false;
-  bool _isWord = false;  
+  // bool _isWord = false;  
   
   void initState() {
     super.initState();

@@ -5,8 +5,6 @@ import 'package:flutter_custom_twitter_app/ui/components/templates/account_info.
 import 'package:flutter_custom_twitter_app/ui/components/templates/retweet_card.dart';
 import 'package:flutter_custom_twitter_app/ui/components/templates/tweet_card.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import "package:intl/intl.dart";
 
 class UserProfileData extends ChangeNotifier {
   dynamic response;
