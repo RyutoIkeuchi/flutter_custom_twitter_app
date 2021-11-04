@@ -76,7 +76,6 @@ dynamic viewImage(data) {
 }
 
 Widget reTweetCard(dynamic data) {
-  // print(data);
   return Column(
     children: [
       Row(
@@ -108,9 +107,8 @@ Widget reTweetCard(dynamic data) {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Flexible(
-            flex: 1,
-            child: userIcon(data['retweetedStatusUserprofileImageUrlHttps'])
-          ),
+              flex: 1,
+              child: userIcon(data['retweetedStatusUserprofileImageUrlHttps'])),
           Expanded(
               flex: 4,
               child: Column(
@@ -119,50 +117,45 @@ Widget reTweetCard(dynamic data) {
                     Row(
                       children: [
                         Flexible(
-                            flex: 11,
-                            child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Flexible(
-                                    flex: 5,
-                                    child: tweetUserName(data['entitiesUserMentionsName'][0]['name'])
+                          flex: 11,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Flexible(
+                                  flex: 5,
+                                  child: tweetUserName(
+                                      data['entitiesUserMentionsName'][0]
+                                          ['name'])),
+                              Flexible(child: tweetUserId(data['userId'])),
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  tweetTimeDate(data['createdAt']),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black54,
                                   ),
-                                  Flexible(
-                                    child:tweetUserId(data['userId'])
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                      tweetTimeDate(data['createdAt']),
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.black54,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
+                            ],
+                          ),
                         ),
                         Flexible(
                           child: Container(
-                            child: FaIcon(
-                              FontAwesomeIcons.ellipsisH,
-                              size: 16,
-                              color: Colors.black12,
-                            )
-                          ),
+                              child: FaIcon(
+                            FontAwesomeIcons.ellipsisH,
+                            size: 16,
+                            color: Colors.black12,
+                          )),
                         ),
                       ],
                     ),
                     Container(child: Text(replaceText(data['text']))),
                     Container(child: viewImage(data)),
                     tweetBottomView(data),
-                  ]
-              )
-          )
+                  ]))
         ],
       )
     ],
   );
 }
-

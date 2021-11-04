@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_twitter_app/ui/pages/look_tweet_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -58,15 +59,28 @@ class Timeline extends StatelessWidget {
                   itemCount: data.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(color: Colors.black12, width: 1.0)
-                            )
+                      decoration: BoxDecoration(
+                          border: Border(
+                              bottom: BorderSide(color: Colors.black12, width: 1.0)
+                          )
+                      ),
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          primary: Colors.black87,
+                          padding: EdgeInsets.all(10),
+                          textStyle: TextStyle(fontSize: 14)
                         ),
-                        child: !checkTextData(data[index]['text'])
-                            ? tweetCard(data[index])
-                            : reTweetCard(data[index])
+                        child:!checkTextData(data[index]['text']) ? 
+                        tweetCard(data[index]) : reTweetCard(data[index]),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LookTweetPage(data:data[index])
+                            ),
+                          );
+                        },
+                      )
                     );
                   }
                 ),
