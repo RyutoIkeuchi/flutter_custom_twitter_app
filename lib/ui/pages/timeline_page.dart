@@ -55,38 +55,41 @@ class Timeline extends StatelessWidget {
                   await TimelineTweetData().refresh();
                 },
                 child: ListView.builder(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  itemCount: data.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      decoration: BoxDecoration(
-                          border: Border(
-                              bottom: BorderSide(color: Colors.black12, width: 1.0)
-                          )
-                      ),
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          primary: Colors.black87,
-                          padding: EdgeInsets.all(10),
-                          textStyle: TextStyle(fontSize: 14)
-                        ),
-                        child:!checkTextData(data[index]['text']) ? 
-                        tweetCard(data[index]) : reTweetCard(data[index]),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LookTweetPage(data:data[index])
-                            ),
-                          );
-                        },
-                      )
-                    );
-                  }
-                ),
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemCount: data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      color: Colors.black12, width: 1.0))),
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                                primary: Colors.black87,
+                                padding: EdgeInsets.all(10),
+                                textStyle: TextStyle(fontSize: 14)),
+                            child: !checkTextData(data[index]['text'])
+                                ? tweetCard(data[index])
+                                : reTweetCard(data[index]),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        LookTweetPage(data: data[index])),
+                              );
+                            },
+                          ));
+                    }),
               );
-            })
-        )
-    );
+            }),
+            floatingActionButton: Container(
+              margin: EdgeInsets.only(bottom: 50),
+              child: FloatingActionButton(
+                child:FaIcon(FontAwesomeIcons.feather),
+                onPressed: () {},
+              ),
+            )
+            ));
   }
 }
