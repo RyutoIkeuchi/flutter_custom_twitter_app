@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_twitter_app/ui/components/templates/bottomtabs_navigation.dart';
 import 'ui/components/templates/bottomtabs_navigation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    ProviderScope(
+      child:  MyApp(),
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
