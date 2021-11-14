@@ -32,7 +32,7 @@ class _BottomTabsNavigationState extends State<BottomTabsNavigation> {
               label: '',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.email_outlined,size: 24,),
+              icon: Icon(Icons.account_circle_outlined,size: 24,),
               label: '',
             ),
           ],

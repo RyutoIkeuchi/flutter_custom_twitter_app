@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_twitter_app/ui/pages/look_tweet_page.dart';
+import 'package:flutter_custom_twitter_app/ui/pages/post_tweet.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-import 'package:flutter_custom_twitter_app/services/home_time_line.dart';
+import 'package:flutter_custom_twitter_app/services/home_timeline_api.dart';
 import 'package:flutter_custom_twitter_app/ui/components/templates/retweet_card.dart';
 import 'package:flutter_custom_twitter_app/ui/components/templates/tweet_card.dart';
 import 'package:flutter_custom_twitter_app/ui/components/templates/drawer_view.dart';
@@ -87,7 +88,15 @@ class Timeline extends StatelessWidget {
               margin: EdgeInsets.only(bottom: 50),
               child: FloatingActionButton(
                 child:FaIcon(FontAwesomeIcons.feather),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PostTweet(),
+                    fullscreenDialog: true,
+                  ),
+                );
+                },
               ),
             )
             ));
