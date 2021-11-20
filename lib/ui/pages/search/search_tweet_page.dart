@@ -1,44 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_twitter_app/ViewModel/search_tweet.dart';
+import 'package:flutter_custom_twitter_app/ViewModel/searchword_provider.dart';
 import 'package:flutter_custom_twitter_app/ui/components/atoms/search_screen.dart';
-import 'package:provider/provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:flutter_custom_twitter_app/services/search_tweet_api.dart';
 import 'package:flutter_custom_twitter_app/ui/components/templates/retweet_card.dart';
 import 'package:flutter_custom_twitter_app/ui/components/templates/tweet_card.dart';
 
-
-class SearchTweetData extends ChangeNotifier {
-  List data = [];
-  Future<dynamic> getSearchTweetData(word) async {
-    this.data = await getSearchTweetApi(word);
-    notifyListeners();
-  }
-
-  Future<dynamic> refresh(word) async {
-    this.data = await getSearchTweetApi(word);
-    notifyListeners();
-  }
-}
-
 class SearchTweet extends StatefulWidget {
-  final String? word;
-
-  SearchTweet({
-    Key? key,
-    this.word,
-  }) : super(key: key);
-
   @override
-  _SearchTweetState createState() => _SearchTweetState(word: word);
+  _SearchTweetState createState() => _SearchTweetState();
 }
 
 class _SearchTweetState extends State<SearchTweet> {
-  final String? word;
-
-  _SearchTweetState({
-    this.word,
-  });
-
   FocusNode _focus = new FocusNode();
   bool _isFocus = false;
 
@@ -55,23 +29,24 @@ class _SearchTweetState extends State<SearchTweet> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = TextEditingController();
-    controller.text = (word != null ? word : '')!;
     return Scaffold(
-        appBar: AppBar(
-          title: Container(
+      appBar: AppBar(
+        title: Consumer(builder: (context, watch, child) {
+          String word = watch(searchwordProvider).state;
+          return Container(
             width: 260,
             height: 40,
             child: TextField(
-              controller: controller,
+              controller: TextEditingController(text: word),
               maxLines: 1,
               focusNode: _focus,
               textInputAction: TextInputAction.search,
-              onSubmitted: (word) {
-                if (word != '') {
+              onSubmitted: (text) {
+                if (text != '') {
+                  context.read(searchwordProvider).state = text;
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SearchTweet(word: word)),
+                    MaterialPageRoute(builder: (context) => SearchTweet()),
                   );
                 }
               },
@@ -88,74 +63,73 @@ class _SearchTweetState extends State<SearchTweet> {
                   contentPadding: EdgeInsets.all(10.0),
                   hintText: 'キーワード検索'),
             ),
-          ),
-          leading: !_isFocus
-              ? IconButton(
-                  icon: CircleAvatar(
-                    child: Icon(Icons.people),
-                    backgroundColor: Colors.red,
-                    radius: 16,
-                  ),
-                  onPressed: () {},
-                )
-              : null,
-          actions: _isFocus
-              ? [
-                  Container(
-                    margin: EdgeInsets.only(left: 10, right: 20),
-                    height: 40,
-                    child: TextButton(
-                      child: Text('キャンセル'),
-                      style: TextButton.styleFrom(
-                        primary: Colors.white,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          FocusScope.of(context).unfocus();
-                          _isFocus = false;
-                        });
-                      },
+          );
+        }),
+        leading: !_isFocus
+            ? IconButton(
+                icon: CircleAvatar(
+                  child: Icon(Icons.people),
+                  backgroundColor: Colors.red,
+                  radius: 16,
+                ),
+                onPressed: () {},
+              )
+            : null,
+        actions: _isFocus
+            ? [
+                Container(
+                  margin: EdgeInsets.only(left: 10, right: 20),
+                  height: 40,
+                  child: TextButton(
+                    child: Text('キャンセル'),
+                    style: TextButton.styleFrom(
+                      primary: Colors.white,
                     ),
-                  )
-                ]
-              : null,
-        ),
-        body: _isFocus ? searchScreen() : searchTweet(word!),
-        );
+                    onPressed: () {
+                      setState(() {
+                        FocusScope.of(context).unfocus();
+                        _isFocus = false;
+                      });
+                    },
+                  ),
+                )
+              ]
+            : null,
+      ),
+      body: _isFocus ? searchScreen() : SearchWordTweet(),
+    );
   }
 }
 
-
-Widget searchTweet(String word) {
-  return ChangeNotifierProvider<SearchTweetData>(
-      create: (_) => SearchTweetData()..getSearchTweetData(word),
-      child: Consumer<SearchTweetData>(builder: (context, model, child) {
-        List<dynamic> data = model.data;
-        if (data == []) {
-          return CircularProgressIndicator();
-        }
-        return RefreshIndicator(
-          onRefresh: () async {
-            await SearchTweetData().refresh(word);
-          },
-          child: ListView.builder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: data.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      border: Border(
-                          bottom:
-                              BorderSide(color: Colors.black12, width: 1.0))
-                  ),
-                  child: !checkTextData(data[index]['text'])
-                      ? tweetCard(data[index])
-                      : reTweetCard(data[index]),
-                );
-              }
-          ),
-        );
-      })
-  );
+class SearchWordTweet extends ConsumerWidget {
+  Widget build(BuildContext context, ScopedReader watch) {
+    final String word = watch(searchwordProvider).state;
+    AsyncValue<dynamic> value = watch(searchTweetProvider(word));
+    return value.when(
+      data: (value) {
+        return Scaffold(
+            body: RefreshIndicator(
+                onRefresh: () async {
+                  await context.refresh(searchTweetProvider(word));
+                },
+                child: ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemCount: value.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(
+                                    color: Colors.black12, width: 1.0))),
+                        child: !checkTextData(value[index]['text'])
+                            ? tweetCard(value[index])
+                            : reTweetCard(value[index]),
+                      );
+                    })));
+      },
+      loading: () => CircularProgressIndicator(),
+      error: (err, stack) => Text('Error: $err'),
+    );
+  }
 }

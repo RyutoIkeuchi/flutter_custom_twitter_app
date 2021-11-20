@@ -1,49 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_twitter_app/services/trend_word_api.dart';
+import 'package:flutter_custom_twitter_app/ViewModel/search_word_provider.dart';
+import 'package:flutter_custom_twitter_app/ViewModel/searchword_provider.dart';
 import 'package:flutter_custom_twitter_app/ui/pages/search/search_tweet_page.dart';
-import 'package:provider/provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class TrendTweetData extends ChangeNotifier {
-  List data = [];
-  Future<dynamic> getTrendTweet() async {
-    this.data = await getTrendApi();
-    notifyListeners();
-  }
+class SearchTrendWordScreen extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
+    AsyncValue<dynamic> value = watch(searchTrendWordProvider);
 
-  Future<dynamic> refresh() async {
-    this.data = await getTrendApi();
-    notifyListeners();
-  }
-}
-
-Widget searchWordScreen() {
-  return ChangeNotifierProvider<TrendTweetData>(
-      create: (_) => TrendTweetData()..getTrendTweet(),
-      child: Consumer<TrendTweetData>(builder: (context, model, child) {
-        List<dynamic> data = model.data;
-
-        if (data == []) {
-          return CircularProgressIndicator();
-        }
-
+    return value.when(
+      data: (value) {
         return RefreshIndicator(
           onRefresh: () async {
-            await TrendTweetData().refresh();
+            await context.refresh(searchTrendWordProvider);
           },
           child: ListView.builder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: data.length,
+              physics: AlwaysScrollableScrollPhysics(),
+              itemCount: value.length,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
-                  // padding: EdgeInsets.all(10),
                   child: ListTile(
                     title: Text(
-                      data[index]['name'],
+                      value[index]['name'],
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                     ),
                     subtitle: Text(
-                      '${data[index]["tweetVolume"]}のツイート',
+                      '${value[index]["tweetVolume"]}のツイート',
                       style: TextStyle(fontSize: 12),
                     ),
                     trailing: Icon(
@@ -52,16 +36,21 @@ Widget searchWordScreen() {
                       color: Colors.black26,
                     ),
                     onTap: () => {
+                      context.read(searchwordProvider).state = value[index]['name'],
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                SearchTweet(word: data[index]['name'])),
+                                SearchTweet()),
                       )
                     },
                   ),
                 );
               }),
         );
-      }));
+      },
+      loading: () => CircularProgressIndicator(),
+      error: (err, stack) => Text('Error: $err'),
+    );
+  }
 }
