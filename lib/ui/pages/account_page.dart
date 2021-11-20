@@ -1,91 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_twitter_app/services/user_profile_api.dart';
-import 'package:flutter_custom_twitter_app/services/user_tweet_api.dart';
+import 'package:flutter_custom_twitter_app/ViewModel/account_provider.dart';
 import 'package:flutter_custom_twitter_app/ui/components/templates/account_info.dart';
-import 'package:flutter_custom_twitter_app/ui/components/templates/retweet_card.dart';
-import 'package:flutter_custom_twitter_app/ui/components/templates/tweet_card.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_custom_twitter_app/ui/components/templates/account_user_tweet.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class UserProfileData extends ChangeNotifier {
-  dynamic response;
-  dynamic data;
-  List<dynamic> tweet = [];
-  Future<dynamic> getUserProfileData() async {
-    this.response = await getUserProfileApi();
-    this.data = response['data'];
-    this.tweet = await getUserTweetApi();
-    notifyListeners();
-  }
-
-  Future<dynamic> refresh() async {
-    this.response = await getUserProfileApi();
-    this.data = response['data'];
-    this.tweet = await getUserTweetApi();
-    notifyListeners();
-  }
-}
-
-class Account extends StatelessWidget {
-  final dateNow = DateTime.now();
-
-  bool checkTextData(text) {
-    var match = RegExp('^RT').hasMatch(text);
-    if (match) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
+class Account extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider<UserProfileData>(
-        create: (context) => UserProfileData()..getUserProfileData(),
-        child: Scaffold(
-            body: Consumer<UserProfileData>(builder: (context, model, child) {
-          dynamic data = model.data;
-          dynamic tweet = model.tweet;
-
-          if (data == null) {
-            return CircularProgressIndicator();
-          }
-
-          return RefreshIndicator(
+  Widget build(BuildContext context, ScopedReader watch) {
+    AsyncValue<dynamic> config = watch(accountProfileProvider);
+    return config.when(data: (config) {
+      return Scaffold(
+          body: RefreshIndicator(
               onRefresh: () async {
-                await UserProfileData().refresh();
+                await context.refresh(accountTweetProvider);
               },
               child: CustomScrollView(slivers: [
-                 SliverLayoutBuilder(
-                    builder: (BuildContext context, constraints) {
-                      final scrolled = constraints.scrollOffset > 160;
-                      return SliverAppBar(
-                        title:scrolled ? Text(data['name'],style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),) : null,
-                        // backgroundColor:Colors.blue,
-                        pinned: true,
-                        primary: true,
-                        toolbarHeight:50,
-                        collapsedHeight: 50,
-                        expandedHeight: 60,
-                      );
-                    },
+                SliverLayoutBuilder(
+                  builder: (BuildContext context, constraints) {
+                    final scrolled = constraints.scrollOffset > 160;
+                    return SliverAppBar(
+                      title:scrolled ? Text(config['name'],style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),) : null,
+                      pinned: true,
+                      primary: true,
+                      toolbarHeight: 50,
+                      collapsedHeight: 50,
+                      expandedHeight: 60,
+                    );
+                  },
                 ),
-                SliverToBoxAdapter(
-                  child:accountInfo(data, context)
-                ),
+                SliverToBoxAdapter(child: AccountInfo()),
                 SliverList(delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                  return Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          border: Border(
-                              bottom: BorderSide(
-                                  color: Colors.black12, width: 1.0))),
-                      child: !checkTextData(tweet[index]['text'])
-                          ? tweetCard(tweet[index])
-                          : reTweetCard(tweet[index]));
+                  return AccountUserTweet(index: index);
                 })),
-              ]));
-        })));
+              ])));
+    },
+    loading: () => CircularProgressIndicator(),
+    error: (err, stack) => Text('Error: $err'),
+    );
   }
 }
 
@@ -96,7 +48,8 @@ class Delegate extends SliverPersistentHeaderDelegate {
   Delegate(this.backgroundColor, this._title);
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       color: backgroundColor,
       child: Center(
