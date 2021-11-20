@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_twitter_app/ViewModel/account_provider.dart';
-import 'package:flutter_custom_twitter_app/ui/components/templates/account_info.dart';
-import 'package:flutter_custom_twitter_app/ui/components/templates/account_user_tweet.dart';
+import 'package:flutter_custom_twitter_app/ui/pages/account/account_info.dart';
+import 'package:flutter_custom_twitter_app/ui/pages/account/account_user_tweet.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class Account extends ConsumerWidget {
