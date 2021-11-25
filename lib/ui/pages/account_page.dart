@@ -7,36 +7,43 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class Account extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    AsyncValue<dynamic> config = watch(accountProfileProvider);
-    return config.when(data: (config) {
-      return Scaffold(
-          body: RefreshIndicator(
-              onRefresh: () async {
-                await context.refresh(accountTweetProvider);
-              },
-              child: CustomScrollView(slivers: [
-                SliverLayoutBuilder(
-                  builder: (BuildContext context, constraints) {
-                    final scrolled = constraints.scrollOffset > 160;
-                    return SliverAppBar(
-                      title:scrolled ? Text(config['name'],style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),) : null,
-                      pinned: true,
-                      primary: true,
-                      toolbarHeight: 50,
-                      collapsedHeight: 50,
-                      expandedHeight: 60,
-                    );
-                  },
-                ),
-                SliverToBoxAdapter(child: AccountInfo()),
-                SliverList(delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                  return AccountUserTweet(index: index);
-                })),
-              ])));
-    },
-    loading: () => CircularProgressIndicator(),
-    error: (err, stack) => Text('Error: $err'),
+    AsyncValue<dynamic> value = watch(accountProfileProvider);
+    return value.when(
+      data: (value) {
+        return Scaffold(
+            body: RefreshIndicator(
+                onRefresh: () async {
+                  await context.refresh(accountTweetProvider);
+                },
+                child: CustomScrollView(slivers: [
+                  SliverLayoutBuilder(
+                    builder: (BuildContext context, constraints) {
+                      final scrolled = constraints.scrollOffset > 160;
+                      return SliverAppBar(
+                        title: scrolled
+                            ? Text(
+                                value['name'],
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.bold),
+                              )
+                            : null,
+                        pinned: true,
+                        primary: true,
+                        toolbarHeight: 50,
+                        collapsedHeight: 50,
+                        expandedHeight: 60,
+                      );
+                    },
+                  ),
+                  SliverToBoxAdapter(child: AccountInfo()),
+                  SliverList(delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                    return AccountUserTweet(index: index);
+                  })),
+                ])));
+      },
+      loading: () => CircularProgressIndicator(),
+      error: (err, stack) => Text('Error: $err'),
     );
   }
 }

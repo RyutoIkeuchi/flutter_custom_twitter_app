@@ -29,13 +29,14 @@ Future<dynamic> getUserTweetApi() async {
   );
 
   final res = await client.get(
-    Uri.parse('https://api.twitter.com/1.1/statuses/user_timeline.json?user_id=1262567497795907584'),
+    Uri.parse(
+        'https://api.twitter.com/1.1/statuses/user_timeline.json?user_id=1262567497795907584'),
   );
 
   dynamic data = jsonDecode(res.body);
-  final tweetData = data
-      .map((model) => HomeTimelineModel.fromJson(model))
-      .toList();
+  print(data);
+  final tweetData =
+      data.map((model) => HomeTimelineModel.fromJson(model)).toList();
   var body = jsonEncode(tweetData);
   List<dynamic> aaa = jsonDecode(body);
   return aaa;
