@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_twitter_app/ViewModel/search_word_provider.dart';
 import 'package:flutter_custom_twitter_app/ViewModel/searchword_provider.dart';
+import 'package:flutter_custom_twitter_app/models/trend_word_model.dart';
 import 'package:flutter_custom_twitter_app/ui/pages/search/search_tweet_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SearchTrendWordScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    AsyncValue<dynamic> value = watch(searchTrendWordProvider);
+    AsyncValue<List<TrendWordModel>> value = watch(searchTrendWordProvider);
 
     return value.when(
       data: (value) {
@@ -22,12 +23,12 @@ class SearchTrendWordScreen extends ConsumerWidget {
                 return Container(
                   child: ListTile(
                     title: Text(
-                      value[index]['name'],
+                      value[index].name,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                     ),
                     subtitle: Text(
-                      '${value[index]["tweetVolume"]}のツイート',
+                      '${value[index].tweetVolume}のツイート',
                       style: TextStyle(fontSize: 12),
                     ),
                     trailing: Icon(
@@ -36,7 +37,7 @@ class SearchTrendWordScreen extends ConsumerWidget {
                       color: Colors.black26,
                     ),
                     onTap: () => {
-                      context.read(searchwordProvider).state = value[index]['name'],
+                      context.read(searchwordProvider).state = value[index].name,
                       Navigator.push(
                         context,
                         MaterialPageRoute(
