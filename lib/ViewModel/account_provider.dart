@@ -4,8 +4,7 @@ import 'package:flutter_custom_twitter_app/services/user_tweet_api.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final accountProfileProvider = FutureProvider<UserProfileModel>((ref) async {
-  final data = await getUserProfileApi();
-  return data;
+  return await getUserProfileApi();
 });
 
 final accountTweetProvider = FutureProvider<dynamic>((ref) async {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_twitter_app/ViewModel/account_provider.dart';
 import 'package:flutter_custom_twitter_app/ViewModel/following_and_follower_provider.dart';
 import 'package:flutter_custom_twitter_app/models/following_and_follower_model.dart';
+import 'package:flutter_custom_twitter_app/models/user_profile_model.dart';
 import 'package:flutter_custom_twitter_app/ui/components/atoms/tweet_user_id.dart';
 import 'package:flutter_custom_twitter_app/ui/components/atoms/tweet_user_name.dart';
 import 'package:flutter_custom_twitter_app/ui/components/atoms/user_icon.dart';
@@ -14,7 +16,16 @@ class FollowingAndFollowerListPage extends StatelessWidget {
         length: 2,
         child: Scaffold(
             appBar: AppBar(
-              title: Text('こんにちは'),
+              title: Consumer(builder: (context, watch, _) {
+                AsyncValue<UserProfileModel> value =
+                    watch(accountProfileProvider);
+                return value.when(
+                    data: (value) {
+                      return Text(value.name,style: TextStyle(fontSize: 16),);
+                    },
+                    loading: () => CircularProgressIndicator(),
+                    error: (err, stack) => Text('Error: $err'));
+              }),
               bottom: TabBar(isScrollable: true, tabs: [
                 Container(
                   alignment: Alignment.center,
@@ -40,7 +51,8 @@ class FollowingAndFollowerListPage extends StatelessWidget {
 class FollowingView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    AsyncValue<List<FollowingAndFollowerModel>> value = watch(followingListProvider);
+    AsyncValue<List<FollowingAndFollowerModel>> value =
+        watch(followingListProvider);
     return value.when(
       data: (value) {
         return ListView.builder(
@@ -79,8 +91,7 @@ class FollowingView extends ConsumerWidget {
                                               CrossAxisAlignment.start,
                                           children: [
                                             tweetUserName(value[index].name),
-                                            tweetUserId(
-                                                value[index].username)
+                                            tweetUserId(value[index].username)
                                           ],
                                         ),
                                       ),
@@ -129,7 +140,8 @@ class FollowingView extends ConsumerWidget {
 class FollowerView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    AsyncValue<List<FollowingAndFollowerModel>> value = watch(followerListProvider);
+    AsyncValue<List<FollowingAndFollowerModel>> value =
+        watch(followerListProvider);
     return value.when(
       data: (value) {
         return ListView.builder(
@@ -168,8 +180,7 @@ class FollowerView extends ConsumerWidget {
                                               CrossAxisAlignment.start,
                                           children: [
                                             tweetUserName(value[index].name),
-                                            tweetUserId(
-                                                value[index].username)
+                                            tweetUserId(value[index].username)
                                           ],
                                         ),
                                       ),

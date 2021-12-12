@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_twitter_app/ViewModel/account_provider.dart';
 import 'package:flutter_custom_twitter_app/models/user_profile_model.dart';
 import 'package:flutter_custom_twitter_app/ui/components/templates/change_accout_info.dart';
-import 'package:flutter_custom_twitter_app/ui/pages/follow_follower_list_page.dart';
+import 'package:flutter_custom_twitter_app/ui/pages/following_and_followerlist_page.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import "package:intl/intl.dart";
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
