@@ -18,7 +18,7 @@ final clientCredentials = oauth1.ClientCredentials(
 late final auth = oauth1.Authorization(clientCredentials, platform);
 oauth1.Credentials? tokenCredentials;
 
-Future<dynamic> getUserTweetApi() async {
+Future<List<HomeTimelineModel>> getUserTweetApi() async {
   final client = oauth1.Client(
     platform.signatureMethod,
     clientCredentials,
@@ -33,11 +33,6 @@ Future<dynamic> getUserTweetApi() async {
         'https://api.twitter.com/1.1/statuses/user_timeline.json?user_id=1262567497795907584'),
   );
 
-  dynamic data = jsonDecode(res.body);
-  print(data);
-  final tweetData =
-      data.map((model) => HomeTimelineModel.fromJson(model)).toList();
-  var body = jsonEncode(tweetData);
-  List<dynamic> aaa = jsonDecode(body);
-  return aaa;
+  final data = jsonDecode(res.body);
+  return data.map<HomeTimelineModel>((model) => HomeTimelineModel.fromJson(model)).toList();
 }

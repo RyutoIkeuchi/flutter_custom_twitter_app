@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_twitter_app/ViewModel/search_tweet.dart';
 import 'package:flutter_custom_twitter_app/ViewModel/searchword_provider.dart';
+import 'package:flutter_custom_twitter_app/models/home_timeline_tweet_model.dart';
 import 'package:flutter_custom_twitter_app/ui/components/atoms/search_screen.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:flutter_custom_twitter_app/ui/components/templates/retweet_card.dart';
 import 'package:flutter_custom_twitter_app/ui/components/templates/tweet_card.dart';
 
 class SearchTweet extends StatefulWidget {
@@ -104,7 +104,7 @@ class _SearchTweetState extends State<SearchTweet> {
 class SearchWordTweet extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final String word = watch(searchwordProvider).state;
-    AsyncValue<dynamic> value = watch(searchTweetProvider(word));
+    AsyncValue<List<HomeTimelineModel>> value = watch(searchTweetProvider(word));
     return value.when(
       data: (value) {
         return Scaffold(
@@ -122,9 +122,7 @@ class SearchWordTweet extends ConsumerWidget {
                             border: Border(
                                 bottom: BorderSide(
                                     color: Colors.black12, width: 1.0))),
-                        child: !checkTextData(value[index]['text'])
-                            ? tweetCard(value[index])
-                            : reTweetCard(value[index]),
+                        child:tweetCard(value[index])
                       );
                     })));
       },

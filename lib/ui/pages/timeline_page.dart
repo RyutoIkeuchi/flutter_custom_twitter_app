@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_twitter_app/ViewModel/timeline_tweet_provider.dart';
+import 'package:flutter_custom_twitter_app/models/home_timeline_tweet_model.dart';
 import 'package:flutter_custom_twitter_app/ui/pages/look_tweet_page.dart';
 import 'package:flutter_custom_twitter_app/ui/pages/post_tweet.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -12,19 +13,10 @@ import '../components/templates/drawer_view.dart';
 
 class Timeline extends ConsumerWidget {
   final dateNow = DateTime.now();
-
-  bool checkTextData(text) {
-    var match = RegExp('^RT').hasMatch(text);
-    if (match) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
+  
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    AsyncValue<dynamic> value = watch(homeTimelineProvider);
+    AsyncValue<List<HomeTimelineModel>> value = watch(homeTimelineProvider);
     return value.when(
       data: (value) {
         return Scaffold(
@@ -50,9 +42,7 @@ class Timeline extends ConsumerWidget {
                               primary: Colors.black87,
                               padding: EdgeInsets.all(10),
                               textStyle: TextStyle(fontSize: 14)),
-                          child: !checkTextData(value[index]['text'])
-                              ? tweetCard(value[index])
-                              : reTweetCard(value[index]),
+                          child: tweetCard(value[index]),
                           onPressed: () {
                             Navigator.push(
                               context,

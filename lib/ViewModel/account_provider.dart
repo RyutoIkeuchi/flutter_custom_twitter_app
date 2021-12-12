@@ -1,3 +1,4 @@
+import 'package:flutter_custom_twitter_app/models/home_timeline_tweet_model.dart';
 import 'package:flutter_custom_twitter_app/models/user_profile_model.dart';
 import 'package:flutter_custom_twitter_app/services/user_profile_api.dart';
 import 'package:flutter_custom_twitter_app/services/user_tweet_api.dart';
@@ -7,7 +8,6 @@ final accountProfileProvider = FutureProvider<UserProfileModel>((ref) async {
   return await getUserProfileApi();
 });
 
-final accountTweetProvider = FutureProvider<dynamic>((ref) async {
-  final data = await getUserTweetApi();
-  return data;
+final accountTweetProvider = FutureProvider<List<HomeTimelineModel>>((ref) async {
+  return await getUserTweetApi();
 });

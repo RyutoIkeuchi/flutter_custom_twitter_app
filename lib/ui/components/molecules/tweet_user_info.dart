@@ -22,7 +22,7 @@ String tweetTimeDate(date) {
   }
 }
 
-Widget tweetUserInfo(dynamic data) {
+Widget tweetUserInfo(data) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
@@ -31,12 +31,12 @@ Widget tweetUserInfo(dynamic data) {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Flexible(flex: 5, child: tweetUserName(data['userName'])),
-            Flexible(child: tweetUserId(data['userId'])),
+            Flexible(flex: 5, child: tweetUserName(data.userName)),
+            Flexible(child: tweetUserId(data.userId)),
             Expanded(
               flex: 2,
               child: Text(
-                tweetTimeDate(data['createdAt']),
+                tweetTimeDate(data.createdAt),
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.black54,

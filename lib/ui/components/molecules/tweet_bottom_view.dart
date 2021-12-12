@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-Widget tweetBottomView(dynamic data) {
+Widget tweetBottomView(data) {
   return Container(
     margin: EdgeInsets.only(top: 10),
     child: Row(
@@ -21,7 +21,7 @@ Widget tweetBottomView(dynamic data) {
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 5),
-                  child: Text(data['retweetCount'].toString()),
+                  child: Text(data.retweetCount.toString()),
                 ),
               ],
             ),
@@ -38,7 +38,7 @@ Widget tweetBottomView(dynamic data) {
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 5),
-                  child: Text(data['favoriteCount'].toString()),
+                  child: Text(data.favoriteCount.toString()),
                 ),
               ],
             ),
