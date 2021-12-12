@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_twitter_app/ViewModel/account_provider.dart';
+import 'package:flutter_custom_twitter_app/models/user_profile_model.dart';
 import 'package:flutter_custom_twitter_app/ui/components/templates/change_accout_info.dart';
+import 'package:flutter_custom_twitter_app/ui/pages/follow_follower_list_page.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import "package:intl/intl.dart";
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -16,7 +18,7 @@ String tweetTimeDate(date) {
 class AccountInfo extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    AsyncValue<dynamic> value = watch(accountProfileProvider);
+    AsyncValue<UserProfileModel> value = watch(accountProfileProvider);
     return value.when(
       data: (value) {
         return Container(
@@ -48,7 +50,7 @@ class AccountInfo extends ConsumerWidget {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(32),
-                              child: Image.network(value['profile_image_url'],
+                              child: Image.network(value.profileImageUrl,
                                   width: 64, height: 64, fit: BoxFit.fill),
                             ),
                           ),
@@ -70,11 +72,9 @@ class AccountInfo extends ConsumerWidget {
                             ),
                             onPressed: () => {
                               showCupertinoModalBottomSheet(
-                                expand: true,
-                                context: context,
-                                // backgroundColor: Colors.transparent,
-                                builder: (context) => ChangeAccountInfo()
-                              )
+                                  expand: true,
+                                  context: context,
+                                  builder: (context) => ChangeAccountInfo())
                             },
                           ),
                         ],
@@ -88,7 +88,7 @@ class AccountInfo extends ConsumerWidget {
                     Container(
                       width: double.infinity,
                       child: Text(
-                        value['name'],
+                        value.name,
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
@@ -98,7 +98,7 @@ class AccountInfo extends ConsumerWidget {
                       width: double.infinity,
                       margin: EdgeInsets.only(bottom: 16),
                       child: Text(
-                        "@${value['username']}",
+                        "@${value.username}",
                         textAlign: TextAlign.left,
                         style: TextStyle(color: Colors.black45, fontSize: 12),
                       ),
@@ -106,7 +106,7 @@ class AccountInfo extends ConsumerWidget {
                     Container(
                       margin: EdgeInsets.only(bottom: 10),
                       child: Text(
-                        value['description'],
+                        value.description,
                         style: TextStyle(fontSize: 14),
                       ),
                     ),
@@ -124,7 +124,7 @@ class AccountInfo extends ConsumerWidget {
                                     color: Colors.black54,
                                   ),
                                   Text(
-                                    value['location'],
+                                    value.location,
                                     style: TextStyle(
                                         color: Colors.black54, fontSize: 12),
                                   )
@@ -140,7 +140,7 @@ class AccountInfo extends ConsumerWidget {
                                     color: Colors.black54,
                                   ),
                                   Text(
-                                    tweetTimeDate(value['created_at']),
+                                    tweetTimeDate(value.createdAt),
                                     style: TextStyle(
                                         color: Colors.black54, fontSize: 12),
                                   )
@@ -159,16 +159,35 @@ class AccountInfo extends ConsumerWidget {
                               Container(
                                 margin: EdgeInsets.only(right: 3),
                                 child: Text(
-                                  value['public_metrics']['following_count']
+                                  value.followingCount
                                       .toString(),
                                   style: TextStyle(fontSize: 14),
                                 ),
                               ),
-                              Text(
-                                'フォロー中',
-                                style: TextStyle(
-                                    color: Colors.black54, fontSize: 12),
-                              )
+                              TextButton(
+                                child: Text(
+                                  'フォロー中',
+                                  style: TextStyle(
+                                      color: Colors.black54, fontSize: 12),
+                                ),
+                                style: ButtonStyle(
+                                  padding: MaterialStateProperty.all(
+                                      EdgeInsets.zero),
+                                  minimumSize:
+                                      MaterialStateProperty.all(Size.zero),
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          FollowingAndFollowerListPage(),
+                                    ),
+                                  );
+                                },
+                              ),
                             ],
                           ),
                         ),
@@ -178,16 +197,35 @@ class AccountInfo extends ConsumerWidget {
                               Container(
                                 margin: EdgeInsets.only(right: 3),
                                 child: Text(
-                                  value['public_metrics']['followers_count']
+                                  value.followersCount
                                       .toString(),
                                   style: TextStyle(fontSize: 14),
                                 ),
                               ),
-                              Text(
-                                'フォロワー',
-                                style: TextStyle(
-                                    color: Colors.black54, fontSize: 12),
-                              )
+                              TextButton(
+                                child: Text(
+                                  'フォロワー',
+                                  style: TextStyle(
+                                      color: Colors.black54, fontSize: 12),
+                                ),
+                                style: ButtonStyle(
+                                  padding: MaterialStateProperty.all(
+                                      EdgeInsets.zero),
+                                  minimumSize:
+                                      MaterialStateProperty.all(Size.zero),
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          FollowingAndFollowerListPage(),
+                                    ),
+                                  );
+                                },
+                              ),
                             ],
                           ),
                         ),

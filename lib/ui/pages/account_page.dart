@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_twitter_app/ViewModel/account_provider.dart';
+import 'package:flutter_custom_twitter_app/models/user_profile_model.dart';
 import 'package:flutter_custom_twitter_app/ui/pages/account/account_info.dart';
 import 'package:flutter_custom_twitter_app/ui/pages/account/account_user_tweet.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -7,7 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class Account extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    AsyncValue<dynamic> value = watch(accountProfileProvider);
+    AsyncValue<UserProfileModel> value = watch(accountProfileProvider);
     return value.when(
       data: (value) {
         return Scaffold(
@@ -22,7 +23,7 @@ class Account extends ConsumerWidget {
                       return SliverAppBar(
                         title: scrolled
                             ? Text(
-                                value['name'],
+                                value.name,
                                 style: TextStyle(
                                     fontSize: 14, fontWeight: FontWeight.bold),
                               )

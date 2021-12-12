@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_twitter_app/ViewModel/account_provider.dart';
+import 'package:flutter_custom_twitter_app/models/user_profile_model.dart';
 import 'package:flutter_custom_twitter_app/services/const/drawer_listview.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,7 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class DrawerView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    AsyncValue<dynamic> value = watch(accountProfileProvider);
+    AsyncValue<UserProfileModel> value = watch(accountProfileProvider);
     return value.when(
       data: (value) {
         return Drawer(
@@ -21,13 +22,13 @@ class DrawerView extends ConsumerWidget {
                       margin: EdgeInsets.only(bottom: 8),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(32),
-                        child: Image.network(value['profile_image_url'],
+                        child: Image.network(value.profileImageUrl,
                             width: 44, height: 44, fit: BoxFit.fill),
                       ),
                     ),
                     Container(
                       child: Text(
-                        value['name'],
+                        value.name,
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
@@ -35,7 +36,7 @@ class DrawerView extends ConsumerWidget {
                     Container(
                       margin: EdgeInsets.only(bottom: 12),
                       child: Text(
-                        "@${value['username']}",
+                        "@${value.username}",
                         style: TextStyle(color: Colors.black54),
                       ),
                     ),
@@ -47,7 +48,7 @@ class DrawerView extends ConsumerWidget {
                             Container(
                               margin: EdgeInsets.only(right: 3),
                               child: Text(
-                                value['public_metrics']['following_count']
+                                value.followingCount
                                     .toString(),
                                 style: TextStyle(fontSize: 14),
                               ),
@@ -66,7 +67,7 @@ class DrawerView extends ConsumerWidget {
                             Container(
                               margin: EdgeInsets.only(right: 3),
                               child: Text(
-                                value['public_metrics']['followers_count']
+                                value.followersCount
                                     .toString(),
                                 style: TextStyle(fontSize: 14),
                               ),
@@ -82,7 +83,6 @@ class DrawerView extends ConsumerWidget {
                     ])
                   ],
                 ),
-                decoration: BoxDecoration(color: Colors.blue),
               ),
               Container(
                 height: double.maxFinite,

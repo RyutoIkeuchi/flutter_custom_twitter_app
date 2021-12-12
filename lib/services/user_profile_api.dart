@@ -1,3 +1,4 @@
+import 'package:flutter_custom_twitter_app/models/user_profile_model.dart';
 import 'package:oauth1/oauth1.dart' as oauth1;
 import '../../../config.dart';
 import 'dart:convert';
@@ -32,6 +33,6 @@ Future<dynamic> getUserProfileApi() async {
         'https://api.twitter.com/2/users/1262567497795907584?user.fields=created_at,description,public_metrics,profile_image_url,location'),
   );
 
-  dynamic data = jsonDecode(res.body);
-  return data;
+  dynamic json = jsonDecode(res.body);
+  return UserProfileModel.fromJson(json['data']);
 }

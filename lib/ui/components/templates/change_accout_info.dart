@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_twitter_app/ViewModel/account_provider.dart';
+import 'package:flutter_custom_twitter_app/models/user_profile_model.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ChangeAccountInfo extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    AsyncValue<dynamic> value = watch(accountProfileProvider);
+    AsyncValue<UserProfileModel> value = watch(accountProfileProvider);
     return value.when(
       data: (value) {
         return Scaffold(
@@ -66,7 +67,7 @@ class ChangeAccountInfo extends ConsumerWidget {
                               borderRadius: BorderRadius.circular(32),
                               image: DecorationImage(
                                   image:
-                                      NetworkImage(value['profile_image_url']),
+                                      NetworkImage(value.profileImageUrl),
                                   fit: BoxFit.cover)),
                           child: Center(
                               child: Icon(
@@ -97,7 +98,7 @@ class ChangeAccountInfo extends ConsumerWidget {
                     Expanded(
                         flex: 10,
                         child: Container(
-                            child: Text(value['name'],
+                            child: Text(value.name,
                                 style: TextStyle(fontSize: 12))))
                   ],
                 ),
@@ -123,7 +124,7 @@ class ChangeAccountInfo extends ConsumerWidget {
                         flex: 10,
                         child: Container(
                             child: Text(
-                          value['description'],
+                          value.description,
                           style: TextStyle(fontSize: 12),
                         )))
                   ],
