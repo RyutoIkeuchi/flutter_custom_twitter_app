@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_twitter_app/ViewModel/account_provider.dart';
 import 'package:flutter_custom_twitter_app/models/user_profile_model.dart';
 import 'package:flutter_custom_twitter_app/services/const/drawer_listview.dart';
+import 'package:flutter_custom_twitter_app/ui/pages/account_page.dart';
+import 'package:flutter_custom_twitter_app/ui/pages/following_and_followerlist_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DrawerView extends ConsumerWidget {
   @override
@@ -20,10 +21,25 @@ class DrawerView extends ConsumerWidget {
                   children: [
                     Container(
                       margin: EdgeInsets.only(bottom: 8),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(32),
-                        child: Image.network(value.profileImageUrl,
-                            width: 44, height: 44, fit: BoxFit.fill),
+                      child: TextButton(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(32),
+                          child: Image.network(value.profileImageUrl,
+                              width: 44, height: 44, fit: BoxFit.fill),
+                        ),
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all(EdgeInsets.zero),
+                          minimumSize: MaterialStateProperty.all(Size.zero),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Account(),
+                            ),
+                          );
+                        },
                       ),
                     ),
                     Container(
@@ -48,16 +64,33 @@ class DrawerView extends ConsumerWidget {
                             Container(
                               margin: EdgeInsets.only(right: 3),
                               child: Text(
-                                value.followingCount
-                                    .toString(),
+                                value.followingCount.toString(),
                                 style: TextStyle(fontSize: 14),
                               ),
                             ),
-                            Text(
-                              'フォロー中',
-                              style: TextStyle(
-                                  color: Colors.black54, fontSize: 12),
-                            )
+                            TextButton(
+                              child: Text(
+                                'フォロー中',
+                                style: TextStyle(
+                                    color: Colors.black54, fontSize: 12),
+                              ),
+                              style: ButtonStyle(
+                                padding:
+                                    MaterialStateProperty.all(EdgeInsets.zero),
+                                minimumSize:
+                                    MaterialStateProperty.all(Size.zero),
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        FollowingAndFollowerListPage(),
+                                  ),
+                                );
+                              },
+                            ),
                           ],
                         ),
                       ),
@@ -67,16 +100,33 @@ class DrawerView extends ConsumerWidget {
                             Container(
                               margin: EdgeInsets.only(right: 3),
                               child: Text(
-                                value.followersCount
-                                    .toString(),
+                                value.followersCount.toString(),
                                 style: TextStyle(fontSize: 14),
                               ),
                             ),
-                            Text(
-                              'フォロワー',
-                              style: TextStyle(
-                                  color: Colors.black54, fontSize: 12),
-                            )
+                            TextButton(
+                              child: Text(
+                                'フォロワー',
+                                style: TextStyle(
+                                    color: Colors.black54, fontSize: 12),
+                              ),
+                              style: ButtonStyle(
+                                padding:
+                                    MaterialStateProperty.all(EdgeInsets.zero),
+                                minimumSize:
+                                    MaterialStateProperty.all(Size.zero),
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        FollowingAndFollowerListPage(),
+                                  ),
+                                );
+                              },
+                            ),
                           ],
                         ),
                       )
