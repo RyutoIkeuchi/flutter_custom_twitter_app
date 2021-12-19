@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_custom_twitter_app/ViewModel/account_provider.dart';
 import 'package:flutter_custom_twitter_app/ViewModel/searchword_provider.dart';
+import 'package:flutter_custom_twitter_app/models/user_profile_model.dart';
 import 'package:flutter_custom_twitter_app/ui/pages/search/search_trend_page.dart';
 import 'package:flutter_custom_twitter_app/ui/pages/search/search_tweet_page.dart';
 
@@ -66,13 +68,30 @@ class _SearchState extends State<Search> {
           );
         }),
         leading: !_isFocus
-            ? IconButton(
-                icon: CircleAvatar(
-                  child: Icon(Icons.people),
-                  backgroundColor: Colors.red,
-                  radius: 16,
-                ),
-                onPressed: () {},
+            ? Consumer(
+                builder: (context, watch, child) {
+                  AsyncValue<UserProfileModel> value =
+                      watch(accountProfileProvider);
+                  return value.when(
+                    data: (value) {
+                      return TextButton(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(18),
+                          child: Image.network(value.profileImageUrl,
+                              width: 36, height: 36, fit: BoxFit.fill),
+                        ),
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all(EdgeInsets.zero),
+                          minimumSize: MaterialStateProperty.all(Size.zero),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        onPressed: () {},
+                      );
+                    },
+                    loading: () => CircularProgressIndicator(),
+                    error: (err, stack) => Text('Error: $err'),
+                  );
+                },
               )
             : null,
         actions: _isFocus
